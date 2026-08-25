@@ -52,7 +52,7 @@
 }
 
 :root {
-  --radius: 1rem;
+  --radius: 0.5rem;
 
   /* Light Theme (Default) */
   --background: #F8F7F4;
@@ -109,7 +109,7 @@
 }
 
 .dark {
-  --background: #0A0A0A;
+  --background: #0A0A0B;
   --foreground: #F7F7F7;
   --surface: #111111;
   --surface-2: #141414;

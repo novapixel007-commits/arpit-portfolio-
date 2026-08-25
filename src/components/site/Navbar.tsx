@@ -151,28 +151,7 @@ export function Navbar() {
           />
         </motion.div>
 
-        {/* Backdrop blur */}
-        <motion.div
-          style={{
-            backdropFilter: backdropFilterStyle,
-            WebkitBackdropFilter: backdropFilterStyle,
-            position: "absolute",
-            inset: 0,
-            borderRadius: "9999px",
-          }}
-        />
 
-        {/* Top sheen */}
-        <div
-          style={{
-            position: "absolute",
-            inset: 0,
-            borderRadius: "9999px",
-            background:
-              "linear-gradient(to bottom, rgba(255,255,255,0.12), transparent 40%)",
-            pointerEvents: "none",
-          }}
-        />
 
         {/* Hairline border */}
         <div

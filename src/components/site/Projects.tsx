@@ -1,12 +1,5 @@
-import {
-  motion,
-  AnimatePresence,
-  useMotionValue,
-  useSpring,
-  useTransform,
-  useInView,
-} from "motion/react";
-import { Play, ArrowUpRight, Film } from "lucide-react";
+import { motion, useInView } from "motion/react";
+import { Play, ArrowUpRight } from "lucide-react";
 import { useState, useRef, useEffect, useCallback, memo } from "react";
 import { PROJECTS, type Project } from "@/data/projects";
 
@@ -31,32 +24,24 @@ const PROJECT_METADATA: Record<
   1: { year: "2023", duration: "1:05", role: "Senior Editor" },
 };
 
-// ─── HERO PROJECT (HORIZONTAL CARD) ───────────────────────────────────────────
+// ─── HERO PROJECT (HORIZONTAL CARD) ────────────────────────────────────────────
 const HeroProjectCard = memo(function HeroProjectCard({
   project,
   isPlaying,
   onPlay,
   onClosePlay,
-  onHover,
-  prefersReducedMotion,
 }: {
   project: Project;
   isPlaying: boolean;
   onPlay: () => void;
   onClosePlay: () => void;
-  onHover: (hovering: boolean) => void;
-  prefersReducedMotion: boolean;
 }) {
   const cardRef = useRef<HTMLDivElement>(null);
   const isCardInView = useInView(cardRef, { once: false, margin: "-100px" });
 
   const youtubeId = project.video ? getYouTubeId(project.video) : null;
   const isYouTube = Boolean(youtubeId);
-  const meta = PROJECT_METADATA[project.id] || {
-    year: "2024",
-    duration: "1:00",
-    role: "Editor",
-  };
+  const meta = PROJECT_METADATA[project.id] || { year: "2024", duration: "1:00", role: "Editor" };
 
   const thumbnailSrc = youtubeId
     ? `https://img.youtube.com/vi/${youtubeId}/maxresdefault.jpg`
@@ -72,173 +57,117 @@ const HeroProjectCard = memo(function HeroProjectCard({
   return (
     <motion.div
       ref={cardRef}
-      initial={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: 30, filter: "blur(6px)" }}
-      whileInView={{ opacity: 1, y: 0, filter: "blur(0px)", scale: 1 }}
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-80px" }}
-      transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-      onMouseEnter={() => onHover(true)}
-      onMouseLeave={() => onHover(false)}
+      transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
       className="w-full"
     >
-      <div
-        className="group relative rounded-[2rem] border border-white/8 bg-card/30 overflow-hidden cursor-none select-none transition-all duration-400 hover:border-white/20 hover:shadow-lg aspect-[16/9] w-full h-auto"
-      >
-        {/* Shine reflection sweep — disabled in prefersReducedMotion */}
-        {!prefersReducedMotion && (
-          <div className="absolute inset-0 z-20 pointer-events-none overflow-hidden">
-            <div className="absolute inset-y-0 w-1/2 bg-gradient-to-r from-transparent via-white/[0.04] to-transparent rotate-[20deg] translate-x-[-150%] group-hover:translate-x-[250%] transition-transform duration-1000 ease-out" />
-          </div>
+      {/* Video frame */}
+      <div className="group relative rounded-md border border-border/50 overflow-hidden aspect-[16/9] w-full bg-black cursor-pointer transition-all duration-300 hover:border-border">
+        {/* Thumbnail */}
+        {(!isPlaying || !isYouTube) && thumbnailSrc && (
+          <img
+            src={thumbnailSrc}
+            alt={project.title}
+            loading="lazy"
+            className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+          />
         )}
 
-        {/* Video / Thumbnail container */}
-        <div className="absolute inset-0 size-full bg-black">
-          {(!isPlaying || !isYouTube) && thumbnailSrc && (
-            <img
-              src={thumbnailSrc}
-              alt={project.title}
-              loading="lazy"
-              className="absolute inset-0 size-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.02]"
-            />
-          )}
+        {/* HTML5 video */}
+        {isCardInView && !isYouTube && (
+          <video
+            src={project.video}
+            poster={thumbnailSrc}
+            controls={isPlaying}
+            loop
+            playsInline
+            muted
+            autoPlay={isPlaying}
+            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-400 ${
+              isPlaying ? "opacity-100" : "opacity-0"
+            }`}
+          />
+        )}
 
-          {/* Mount video element only when card is in view to avoid CPU decoding loads offscreen */}
-          {isCardInView && !isYouTube && (
-            <video
-              src={project.video}
-              poster={thumbnailSrc}
-              controls={isPlaying}
-              loop
-              playsInline
-              muted
-              autoPlay={isPlaying}
-              className={`absolute inset-0 size-full object-cover transition-opacity duration-500 ${
-                isPlaying ? "opacity-100" : "opacity-0"
-              }`}
-            />
-          )}
+        {/* YouTube iframe — only when visible and playing */}
+        {isCardInView && isYouTube && isPlaying && (
+          <iframe
+            src={`https://www.youtube.com/embed/${youtubeId}?autoplay=1&mute=0&playsinline=1&controls=1&modestbranding=1&rel=0&fs=1`}
+            className="absolute inset-0 w-full h-full pointer-events-auto z-40"
+            allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
+            allowFullScreen
+            style={{ border: "none" }}
+            title={project.title}
+            loading="lazy"
+          />
+        )}
 
-          {/* Mount YouTube iframe only when card is visible and actively playing */}
-          {isCardInView && isYouTube && isPlaying && (
-            <iframe
-              src={`https://www.youtube.com/embed/${youtubeId}?autoplay=1&mute=0&playsinline=1&controls=1&modestbranding=0&rel=0&fs=1`}
-              className="absolute pointer-events-auto z-40"
-              allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
-              allowFullScreen
-              style={{
-                border: "none",
-                width: "100%",
-                height: "100%",
-                position: "absolute",
-                top: "0",
-                left: "0",
-              }}
-              title={project.title}
-              loading="lazy"
-            />
-          )}
+        {/* Bottom vignette */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none z-10" />
 
-          {/* Bottom vignette */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent pointer-events-none z-10" />
-        </div>
-
-        {/* Play trigger overlay */}
+        {/* Play button */}
         {!isPlaying && (
           <button
             onClick={onPlay}
             aria-label={`Play ${project.title}`}
-            className="absolute inset-0 size-full flex items-center justify-center z-30 cursor-none"
+            className="absolute inset-0 w-full h-full flex items-center justify-center z-20"
           >
-            <motion.div
-              initial={prefersReducedMotion ? { opacity: 0.9 } : { scale: 0.9, opacity: 0 }}
-              whileHover={prefersReducedMotion ? {} : { scale: 1, opacity: 1 }}
-              className="px-6 py-3 rounded-full bg-white/10 border border-white/20 backdrop-blur-md flex items-center gap-2.5 transition-all duration-300 shadow-md group-hover:scale-105"
-            >
-              <div className="size-6 rounded-full bg-white flex items-center justify-center">
-                <Play className="size-3 fill-black text-black translate-x-[0.5px]" />
-              </div>
-              <span className="text-white text-[12px] font-semibold uppercase tracking-wider">
-                View Case Study
-              </span>
-            </motion.div>
+            <div className="flex items-center justify-center size-14 lg:size-16 rounded-full border border-white/25 bg-black/30 backdrop-blur-sm transition-all duration-300 group-hover:scale-110 group-hover:border-white/50">
+              <Play className="size-5 fill-white text-white translate-x-[2px]" />
+            </div>
           </button>
         )}
       </div>
 
-      {/* Details below the frame */}
-      <div className="mt-5 flex flex-col md:flex-row md:items-end md:justify-between gap-4 text-left">
-        <div className="space-y-2">
-          <div className="flex items-center gap-2">
-            <span className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[10px] font-mono uppercase tracking-widest text-[#6EE7FF] bg-[#6EE7FF]/10 border border-[#6EE7FF]/20">
-              <Film className="size-3" />
-              {project.category}
-            </span>
-          </div>
-          <h3 className="font-display font-bold text-[22px] md:text-[1.8rem] text-foreground leading-tight tracking-tight">
+      {/* Details below frame */}
+      <div className="mt-5 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3">
+        <div>
+          <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+            {project.category} · {meta.year} · {meta.duration}
+          </p>
+          <h3 className="mt-1.5 font-display font-bold text-[1.3rem] lg:text-[1.6rem] text-foreground leading-tight tracking-tight">
             {project.title}
           </h3>
-          
-          <div className="flex flex-wrap items-center gap-y-1 gap-x-5 text-muted-foreground text-[11.5px] font-mono">
-            <div>
-              <span className="opacity-40 mr-1.5">YEAR:</span>
-              <span className="text-foreground/90 font-medium">{meta.year}</span>
-            </div>
-            <div className="hidden sm:inline text-muted-foreground/30">•</div>
-            <div>
-              <span className="opacity-40 mr-1.5">LENGTH:</span>
-              <span className="text-foreground/90 font-medium">{meta.duration}</span>
-            </div>
-            <div className="hidden sm:inline text-muted-foreground/30">•</div>
-            <div>
-              <span className="opacity-40 mr-1.5">ROLE:</span>
-              <span className="text-foreground/90 font-medium uppercase">{meta.role}</span>
-            </div>
-          </div>
+          <p className="mt-1 font-mono text-[11px] text-muted-foreground/60 uppercase tracking-wider">
+            {meta.role}
+          </p>
         </div>
-
         <a
           href="#contact"
-          className="inline-flex items-center gap-2 text-muted-foreground hover:text-[#6EE7FF] font-mono text-[12px] uppercase tracking-wider transition-colors duration-300 self-start md:self-auto"
+          className="inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-wider text-muted-foreground hover:text-foreground transition-colors duration-200 shrink-0"
         >
-          <span>View Project</span>
-          <ArrowUpRight className="size-4" />
+          Enquire <ArrowUpRight className="size-3.5" />
         </a>
       </div>
     </motion.div>
   );
 });
 
-// ─── SUPPORTING PROJECT (VERTICAL CARD) ───────────────────────────────────────
+// ─── VERTICAL PROJECT (9:16) ───────────────────────────────────────────────────
 const VerticalProjectCard = memo(function VerticalProjectCard({
   project,
   isPlaying,
   onPlay,
   onClosePlay,
-  onHover,
-  prefersReducedMotion,
 }: {
   project: Project;
   isPlaying: boolean;
   onPlay: () => void;
   onClosePlay: () => void;
-  onHover: (hovering: boolean) => void;
-  prefersReducedMotion: boolean;
 }) {
   const cardRef = useRef<HTMLDivElement>(null);
   const isCardInView = useInView(cardRef, { once: false, margin: "-100px" });
 
   const youtubeId = project.video ? getYouTubeId(project.video) : null;
   const isYouTube = Boolean(youtubeId);
-  const meta = PROJECT_METADATA[project.id] || {
-    year: "2024",
-    duration: "1:00",
-    role: "Editor",
-  };
+  const meta = PROJECT_METADATA[project.id] || { year: "2024", duration: "1:00", role: "Editor" };
 
   const thumbnailSrc = youtubeId
     ? `https://img.youtube.com/vi/${youtubeId}/maxresdefault.jpg`
     : project.thumbnail ?? project.image;
 
-  // Auto-pause video when scrolled out of view
   useEffect(() => {
     if (!isCardInView && isPlaying) {
       onClosePlay();
@@ -248,105 +177,81 @@ const VerticalProjectCard = memo(function VerticalProjectCard({
   return (
     <motion.div
       ref={cardRef}
-      initial={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: 40, filter: "blur(6px)" }}
-      whileInView={{ opacity: 1, y: 0, filter: "blur(0px)", scale: 1 }}
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-      onMouseEnter={() => onHover(true)}
-      onMouseLeave={() => onHover(false)}
+      transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
       className="w-full"
     >
-      <div
-        className="group relative rounded-[2rem] border border-white/8 bg-card/30 overflow-hidden cursor-none select-none transition-all duration-400 hover:border-white/20 hover:shadow-lg aspect-[9/16] w-full h-auto"
-      >
-        {/* Media */}
-        <div className="absolute inset-0 size-full bg-black">
-          {(!isPlaying || !isYouTube) && thumbnailSrc && (
-            <img
-              src={thumbnailSrc}
-              alt={project.title}
-              loading="lazy"
-              className="absolute inset-0 size-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.02] group-hover:brightness-90"
-            />
-          )}
+      {/* Video frame */}
+      <div className="group relative rounded-md border border-border/50 overflow-hidden aspect-[9/16] w-full bg-black cursor-pointer transition-all duration-300 hover:border-border">
+        {/* Thumbnail */}
+        {(!isPlaying || !isYouTube) && thumbnailSrc && (
+          <img
+            src={thumbnailSrc}
+            alt={project.title}
+            loading="lazy"
+            className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+          />
+        )}
 
-          {/* Mount video element only when card is in view to avoid CPU decoding loads offscreen */}
-          {isCardInView && !isYouTube && (
-            <video
-              src={project.video}
-              poster={thumbnailSrc}
-              controls={isPlaying}
-              loop
-              playsInline
-              muted
-              autoPlay={isPlaying}
-              className={`absolute inset-0 size-full object-cover transition-opacity duration-500 ${
-                isPlaying ? "opacity-100" : "opacity-0"
-              }`}
-            />
-          )}
+        {/* HTML5 video */}
+        {isCardInView && !isYouTube && (
+          <video
+            src={project.video}
+            poster={thumbnailSrc}
+            controls={isPlaying}
+            loop
+            playsInline
+            muted
+            autoPlay={isPlaying}
+            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-400 ${
+              isPlaying ? "opacity-100" : "opacity-0"
+            }`}
+          />
+        )}
 
-          {/* Mount YouTube iframe only when card is visible and actively playing */}
-          {isCardInView && isYouTube && isPlaying && (
-            <iframe
-              src={`https://www.youtube.com/embed/${youtubeId}?autoplay=1&mute=0&playsinline=1&controls=1&modestbranding=0&rel=0&fs=1`}
-              className="absolute pointer-events-auto z-40"
-              allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
-              allowFullScreen
-              style={{
-                border: "none",
-                width: "100%",
-                height: "100%",
-                position: "absolute",
-                top: "0",
-                left: "0",
-              }}
-              title={project.title}
-              loading="lazy"
-            />
-          )}
+        {/* YouTube iframe */}
+        {isCardInView && isYouTube && isPlaying && (
+          <iframe
+            src={`https://www.youtube.com/embed/${youtubeId}?autoplay=1&mute=0&playsinline=1&controls=1&modestbranding=1&rel=0&fs=1`}
+            className="absolute inset-0 w-full h-full pointer-events-auto z-40"
+            allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
+            allowFullScreen
+            style={{ border: "none" }}
+            title={project.title}
+            loading="lazy"
+          />
+        )}
 
-          <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent pointer-events-none z-10" />
-        </div>
+        {/* Bottom gradient */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent pointer-events-none z-10" />
 
-        {/* Play Icon Fade In */}
+        {/* Play button */}
         {!isPlaying && (
           <button
             onClick={onPlay}
             aria-label={`Play ${project.title}`}
-            className="absolute inset-0 size-full flex items-center justify-center z-30 cursor-none"
+            className="absolute inset-0 w-full h-full flex items-center justify-center z-20"
           >
-            <motion.div
-              initial={prefersReducedMotion ? { opacity: 0.9 } : { scale: 0.8, opacity: 0 }}
-              whileHover={prefersReducedMotion ? {} : { scale: 1, opacity: 1 }}
-              className="size-14 rounded-full bg-white/10 border border-white/25 backdrop-blur-md flex items-center justify-center shadow-md transition-all duration-300"
-            >
-              <Play className="size-5 fill-white text-white translate-x-[1px]" />
-            </motion.div>
+            <div className="flex items-center justify-center size-12 rounded-full border border-white/25 bg-black/30 backdrop-blur-sm transition-all duration-300 group-hover:scale-110 group-hover:border-white/50">
+              <Play className="size-4 fill-white text-white translate-x-[1px]" />
+            </div>
           </button>
         )}
-
       </div>
 
-      {/* Details below the frame */}
-      <div className="mt-4 space-y-1.5 text-left">
-        <span className="font-mono text-[9.5px] uppercase tracking-wider text-[#8B7CFF] block">
-          {project.category} · {meta.role}
-        </span>
-        <h3 className="font-display font-semibold text-[18px] text-foreground leading-tight">
+      {/* Details below frame */}
+      <div className="mt-4">
+        <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+          {project.category} · {meta.year} · {meta.duration}
+        </p>
+        <h3 className="mt-1.5 font-display font-semibold text-[1.1rem] lg:text-[1.2rem] text-foreground leading-tight tracking-tight">
           {project.title}
         </h3>
-        <div className="flex items-center gap-2 text-muted-foreground text-[11px] font-mono">
-          <span>{meta.duration}</span>
-          <span>·</span>
-          <a
-            href="#contact"
-            className="inline-flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors duration-300"
-          >
-            <span>View Project</span>
-            <ArrowUpRight className="size-3" />
-          </a>
-        </div>
+        <p className="mt-0.5 font-mono text-[10px] text-muted-foreground/60 uppercase tracking-wider">
+          {meta.role}
+        </p>
       </div>
     </motion.div>
   );
@@ -355,44 +260,11 @@ const VerticalProjectCard = memo(function VerticalProjectCard({
 // ─── PROJECTS SECTION ─────────────────────────────────────────────────────────
 export function Projects() {
   const [playingId, setPlayingId] = useState<number | null>(null);
-  const [cursorState, setCursorState] = useState<"hidden" | "active">("hidden");
-
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const isSectionInView = useInView(sectionRef, { once: false, margin: "100px" });
-
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
-    setPrefersReducedMotion(mediaQuery.matches);
-    const listener = (e: MediaQueryListEvent) => setPrefersReducedMotion(e.matches);
-    mediaQuery.addEventListener("change", listener);
-    return () => mediaQuery.removeEventListener("change", listener);
-  }, []);
-
-  const cursorX = useMotionValue(-100);
-  const cursorY = useMotionValue(-100);
-
-  // High performance spring parameters
-  const springCursorX = useSpring(cursorX, { stiffness: 500, damping: 35 });
-  const springCursorY = useSpring(cursorY, { stiffness: 500, damping: 35 });
-
-  // Only listen to mouse movements when the section is visible to avoid rendering updates offscreen
-  useEffect(() => {
-    if (typeof window === "undefined" || !isSectionInView || prefersReducedMotion) return;
-    const handleMouseMove = (e: MouseEvent) => {
-      cursorX.set(e.clientX);
-      cursorY.set(e.clientY);
-    };
-    window.addEventListener("mousemove", handleMouseMove, { passive: true });
-    return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, [cursorX, cursorY, isSectionInView, prefersReducedMotion]);
 
   const handleClosePlay = useCallback((id: number) => {
     setPlayingId((current) => (current === id ? null : current));
   }, []);
 
-  // Order of projects
   const hero1 = PROJECTS[0];
   const pair1_left = PROJECTS[1];
   const pair1_right = PROJECTS[2];
@@ -403,144 +275,68 @@ export function Projects() {
   return (
     <section
       id="work"
-      ref={sectionRef}
-      className="relative mt-8 py-4 lg:mt-16 scroll-mt-24 overflow-hidden"
+      className="relative mt-20 lg:mt-28 scroll-mt-24"
     >
-      {/* ── SECTION BACKDROP ── */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
-        {/* Floating gradient lights (Static on prefers-reduced-motion to avoid repaint overhead) */}
-        {!prefersReducedMotion && (
-          <>
-            <motion.div
-              animate={{ x: [0, 40, 0], y: [0, -30, 0] }}
-              transition={{ duration: 25, repeat: Infinity, ease: "easeInOut" }}
-              className="absolute top-[25%] left-[-15%] w-[65%] h-[55%] rounded-full opacity-[0.04]"
-              style={{
-                background: "radial-gradient(circle, #6EE7FF 0%, transparent 70%)",
-                filter: "blur(80px)",
-              }}
-            />
-            <motion.div
-              animate={{ x: [0, -30, 0], y: [0, 30, 0] }}
-              transition={{ duration: 30, repeat: Infinity, ease: "easeInOut", delay: 4 }}
-              className="absolute bottom-[25%] right-[-15%] w-[65%] h-[55%] rounded-full opacity-[0.04]"
-              style={{
-                background: "radial-gradient(circle, #8B7CFF 0%, transparent 70%)",
-                filter: "blur(90px)",
-              }}
-            />
-          </>
-        )}
+      <div className="container-px mx-auto max-w-6xl">
 
-        {/* Subtle static grain overlay */}
-        <div
-          className="absolute inset-0 opacity-[0.015]"
-          style={{
-            backgroundImage:
-              "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")",
-            backgroundSize: "160px",
-          }}
-        />
-
-        {/* Static decorative particles */}
-        <div className="absolute inset-0 opacity-[0.08]">
-          <div className="absolute top-[18%] left-[25%] size-1 rounded-full bg-[#6EE7FF]" />
-          <div className="absolute top-[48%] left-[75%] size-1 rounded-full bg-[#8B7CFF]" />
-          <div className="absolute top-[78%] left-[18%] size-1 rounded-full bg-[#6EE7FF]" />
-        </div>
-      </div>
-
-      {/* ── CUSTOM MAGNETIC PLAY CURSOR ── */}
-      {/* Optimized: Replace backdrop-filter with static high opacity bg to avoid massive repaint workloads on mouseMove */}
-      <motion.div
-        style={{
-          x: springCursorX,
-          y: springCursorY,
-          translateX: "-50%",
-          translateY: "-50%",
-        }}
-        animate={{
-          scale: cursorState === "active" && !prefersReducedMotion ? 1 : 0,
-          opacity: cursorState === "active" && !prefersReducedMotion ? 1 : 0,
-        }}
-        transition={{ duration: 0.25, ease: "easeOut" }}
-        className="hidden lg:flex fixed pointer-events-none rounded-full bg-black/90 border border-[#6EE7FF]/30 size-14 items-center justify-center text-[10px] font-mono uppercase tracking-wider text-white mix-blend-difference z-50 shadow-md"
-      >
-        <span className="font-semibold tracking-wider text-[#6EE7FF]">Play</span>
-      </motion.div>
-
-      <div className="container-px mx-auto max-w-7xl relative z-10">
-        
         {/* Section Header */}
-        <div className="pb-4 mb-8 lg:pb-8 lg:mb-12 border-b border-border text-left">
-          <p className="text-[10px] font-mono uppercase tracking-[0.22em] text-[#6EE7FF] mb-1">
-            selected work
+        <div className="mb-12 lg:mb-16 border-b border-border pb-6">
+          <p className="font-mono text-[10px] lg:text-[11px] uppercase tracking-[0.2em] text-muted-foreground mb-3">
+            Selected Work
           </p>
-          <h2 className="font-display text-[26px] lg:text-[2.6rem] font-bold leading-tight tracking-tighter text-foreground">
+          <h2 className="font-display text-[clamp(2rem,5vw,3.5rem)] font-bold leading-[0.94] tracking-tighter text-foreground">
             Featured Projects
           </h2>
         </div>
 
-        {/* ── PROJECTS WORKFLOW ── */}
-        <div className="flex flex-col gap-[60px]">
-          
-          {/* Row 1: Hero Project (Horizontal) */}
+        {/* Projects layout */}
+        <div className="flex flex-col gap-16 lg:gap-20">
+
+          {/* Row 1: Hero (16:9) */}
           <HeroProjectCard
             project={hero1}
             isPlaying={playingId === hero1.id}
             onPlay={() => setPlayingId(hero1.id)}
             onClosePlay={() => handleClosePlay(hero1.id)}
-            onHover={(h) => setCursorState(h ? "active" : "hidden")}
-            prefersReducedMotion={prefersReducedMotion}
           />
 
-          {/* Row 2: 2 Supporting Projects (Vertical Side by Side) */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10">
+          {/* Row 2: Pair (9:16) */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 lg:gap-10">
             <VerticalProjectCard
               project={pair1_left}
               isPlaying={playingId === pair1_left.id}
               onPlay={() => setPlayingId(pair1_left.id)}
               onClosePlay={() => handleClosePlay(pair1_left.id)}
-              onHover={(h) => setCursorState(h ? "active" : "hidden")}
-              prefersReducedMotion={prefersReducedMotion}
             />
             <VerticalProjectCard
               project={pair1_right}
               isPlaying={playingId === pair1_right.id}
               onPlay={() => setPlayingId(pair1_right.id)}
               onClosePlay={() => handleClosePlay(pair1_right.id)}
-              onHover={(h) => setCursorState(h ? "active" : "hidden")}
-              prefersReducedMotion={prefersReducedMotion}
             />
           </div>
 
-          {/* Row 3: Hero Project (Horizontal) */}
+          {/* Row 3: Hero (16:9) */}
           <HeroProjectCard
             project={hero2}
             isPlaying={playingId === hero2.id}
             onPlay={() => setPlayingId(hero2.id)}
             onClosePlay={() => handleClosePlay(hero2.id)}
-            onHover={(h) => setCursorState(h ? "active" : "hidden")}
-            prefersReducedMotion={prefersReducedMotion}
           />
 
-          {/* Row 4: 2 Supporting Projects (Vertical Side by Side) */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10">
+          {/* Row 4: Pair (9:16) */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 lg:gap-10">
             <VerticalProjectCard
               project={pair2_left}
               isPlaying={playingId === pair2_left.id}
               onPlay={() => setPlayingId(pair2_left.id)}
               onClosePlay={() => handleClosePlay(pair2_left.id)}
-              onHover={(h) => setCursorState(h ? "active" : "hidden")}
-              prefersReducedMotion={prefersReducedMotion}
             />
             <VerticalProjectCard
               project={pair2_right}
               isPlaying={playingId === pair2_right.id}
               onPlay={() => setPlayingId(pair2_right.id)}
               onClosePlay={() => handleClosePlay(pair2_right.id)}
-              onHover={(h) => setCursorState(h ? "active" : "hidden")}
-              prefersReducedMotion={prefersReducedMotion}
             />
           </div>
 

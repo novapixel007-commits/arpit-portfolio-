@@ -43,10 +43,10 @@ const PROJECT_TYPES = [
 const TIMELINES = ["ASAP", "1 month", "1–3 months", "Flexible"];
 
 const BUDGET_CARDS = [
-  { id: "Under ₹10K",  label: "Under ₹10K" },
-  { id: "₹10K–25K",    label: "₹10K–25K"   },
-  { id: "₹25K–50K",    label: "₹25K–50K"   },
-  { id: "₹50K+",       label: "₹50K+"      },
+  { id: "Under ₹25K",   label: "Under ₹25K"   },
+  { id: "₹25K–₹50K",   label: "₹25K–₹50K"   },
+  { id: "₹50K–₹1L",    label: "₹50K–₹1L"    },
+  { id: "₹1L+",         label: "₹1L+"         },
   { id: "Let's Discuss", label: "Let's Discuss" },
 ];
 

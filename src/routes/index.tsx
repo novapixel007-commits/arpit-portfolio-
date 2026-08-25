@@ -7,36 +7,33 @@ import { IntroLoader } from "@/components/site/IntroLoader";
 import { useRef, useState, useEffect } from "react";
 
 // Lazy load below-the-fold sections for optimized initial bundle loading
-const Stats = lazy(() => import("@/components/site/Stats").then(m => ({ default: m.Stats })));
 const Projects = lazy(() => import("@/components/site/Projects").then(m => ({ default: m.Projects })));
 const Process = lazy(() => import("@/components/site/Process").then(m => ({ default: m.Process })));
-const Testimonials = lazy(() => import("@/components/site/Testimonials").then(m => ({ default: m.Testimonials })));
 const About = lazy(() => import("@/components/site/About").then(m => ({ default: m.About })));
-const ClosingCTA = lazy(() => import("@/components/site/ClosingCTA").then(m => ({ default: m.ClosingCTA })));
 const Contact = lazy(() => import("@/components/site/Contact").then(m => ({ default: m.Contact })));
 const Footer = lazy(() => import("@/components/site/Footer").then(m => ({ default: m.Footer })));
 
-export const Route = createFileRoute("/")({
+export const Route = createFileRoute("/")(({
   head: () => ({
     meta: [
       { title: "Arpit Sharma — Cinematic Video Editing & Motion Design" },
       {
         name: "description",
         content:
-          "Premium video editing, color grading and motion design for ambitious creators, startups and brands.",
+          "Cinematic editing, color grading and motion design for founders, creators and brands. Based in Chandigarh, working worldwide.",
       },
       { property: "og:title", content: "Arpit Sharma — Cinematic Video Editing & Motion Design" },
       {
         property: "og:description",
         content:
-          "Independent creative studio crafting commercials, brand films, motion design and product videos.",
+          "Cinematic editing, color grading and motion design for founders, creators and brands.",
       },
       { property: "og:url", content: "/" },
     ],
     links: [{ rel: "canonical", href: "/" }],
   }),
   component: Index,
-});
+}));
 
 function Index() {
   const [introActive, setIntroActive] = useState(true);
@@ -55,7 +52,7 @@ function Index() {
   return (
     <div className="relative min-h-screen overflow-x-hidden">
       {/* SSR black overlay to prevent hydration flashes on first-visit */}
-      {showSsrOverlay && <div className="fixed inset-0 bg-[#050505] z-[9999]" id="ssr-overlay" />}
+      {showSsrOverlay && <div className="fixed inset-0 bg-[#0A0A0B] z-[9999]" id="ssr-overlay" />}
 
       {/* Homepage Content wrapper revealed by clip-path mask */}
       <div
@@ -66,12 +63,9 @@ function Index() {
         <main>
           <Hero />
           <Suspense fallback={null}>
-            <Stats />
             <Projects />
             <Process />
-            <Testimonials />
             <About />
-            <ClosingCTA />
             <Contact />
           </Suspense>
         </main>
