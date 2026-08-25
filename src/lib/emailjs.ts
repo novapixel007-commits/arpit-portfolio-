@@ -5,10 +5,10 @@ export interface ContactPayload {
   name: string;
   email: string;
   category: string;
-  timeline: string;
+  budget: string;
+  timeline?: string;
   message: string;
   company?: string;
-  budget?: string;
   // Common fallback fields automatically populated:
   from_name?: string;
   user_name?: string;

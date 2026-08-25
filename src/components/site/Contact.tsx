@@ -12,8 +12,6 @@ const PROJECT_TYPES = [
   "Social Media",
 ];
 
-const TIMELINES = ["ASAP", "1 month", "1–3 months", "Flexible"];
-
 const BUDGET_OPTIONS = [
   "Under ₹25K",
   "₹25K–₹50K",
@@ -43,7 +41,6 @@ export function Contact() {
   const [sending, setSending] = useState(false);
   
   const [type, setType] = useState(PROJECT_TYPES[0]);
-  const [timeline, setTimeline] = useState(TIMELINES[2]);
   const [budget, setBudget] = useState("");
   const [errors, setErrors] = useState<FormErrors>({});
   
@@ -89,7 +86,6 @@ export function Contact() {
         company: company.trim(),
         category: type,
         budget,
-        timeline,
         message: message.trim(),
       });
       setSubmitted(true);
@@ -130,8 +126,14 @@ export function Contact() {
                 href="mailto:arpit.work007@gmail.com"
                 className="group flex items-center gap-4 text-foreground hover:text-[#6EE7FF] transition-colors"
               >
-                <Mail className="size-5 text-muted-foreground group-hover:text-[#6EE7FF] transition-colors" />
-                <span className="font-medium">arpit.work007@gmail.com</span>
+                <div className="size-10 rounded-full bg-black/20 border border-white/5 flex items-center justify-center group-hover:border-[#6EE7FF]/30 transition-colors">
+                  <Mail className="size-4 text-muted-foreground group-hover:text-[#6EE7FF] transition-colors" />
+                </div>
+                <div>
+                  <div className="font-medium text-[15px]">Email</div>
+                  <div className="text-[13px] text-muted-foreground">Send me an email</div>
+                </div>
+                <ArrowRight className="size-4 ml-auto text-muted-foreground/30 group-hover:text-[#6EE7FF] transition-colors" />
               </a>
               <a
                 href="https://www.instagram.com/i.arpitsharma_?igsh=Ynp0MXVrcTNxOXVt"
@@ -139,8 +141,14 @@ export function Contact() {
                 rel="noopener noreferrer"
                 className="group flex items-center gap-4 text-foreground hover:text-[#6EE7FF] transition-colors"
               >
-                <Instagram className="size-5 text-muted-foreground group-hover:text-[#6EE7FF] transition-colors" />
-                <span className="font-medium">instagram.com/i.arpitsharma_</span>
+                <div className="size-10 rounded-full bg-black/20 border border-white/5 flex items-center justify-center group-hover:border-[#6EE7FF]/30 transition-colors">
+                  <Instagram className="size-4 text-muted-foreground group-hover:text-[#6EE7FF] transition-colors" />
+                </div>
+                <div>
+                  <div className="font-medium text-[15px]">Instagram</div>
+                  <div className="text-[13px] text-muted-foreground">View my work</div>
+                </div>
+                <ArrowRight className="size-4 ml-auto text-muted-foreground/30 group-hover:text-[#6EE7FF] transition-colors" />
               </a>
               <a
                 href="https://www.linkedin.com/in/arpit-sharma-484457379"
@@ -148,8 +156,14 @@ export function Contact() {
                 rel="noopener noreferrer"
                 className="group flex items-center gap-4 text-foreground hover:text-[#6EE7FF] transition-colors"
               >
-                <Linkedin className="size-5 text-muted-foreground group-hover:text-[#6EE7FF] transition-colors" />
-                <span className="font-medium">linkedin.com/in/arpit-sharma</span>
+                <div className="size-10 rounded-full bg-black/20 border border-white/5 flex items-center justify-center group-hover:border-[#6EE7FF]/30 transition-colors">
+                  <Linkedin className="size-4 text-muted-foreground group-hover:text-[#6EE7FF] transition-colors" />
+                </div>
+                <div>
+                  <div className="font-medium text-[15px]">LinkedIn</div>
+                  <div className="text-[13px] text-muted-foreground">Connect professionally</div>
+                </div>
+                <ArrowRight className="size-4 ml-auto text-muted-foreground/30 group-hover:text-[#6EE7FF] transition-colors" />
               </a>
               <a
                 href="https://maps.google.com/?q=Chandigarh,India"
@@ -157,8 +171,14 @@ export function Contact() {
                 rel="noopener noreferrer"
                 className="group flex items-center gap-4 text-foreground hover:text-[#6EE7FF] transition-colors"
               >
-                <MapPin className="size-5 text-muted-foreground group-hover:text-[#6EE7FF] transition-colors" />
-                <span className="font-medium">Chandigarh, India</span>
+                <div className="size-10 rounded-full bg-black/20 border border-white/5 flex items-center justify-center group-hover:border-[#6EE7FF]/30 transition-colors">
+                  <MapPin className="size-4 text-muted-foreground group-hover:text-[#6EE7FF] transition-colors" />
+                </div>
+                <div>
+                  <div className="font-medium text-[15px]">Location</div>
+                  <div className="text-[13px] text-muted-foreground">Chandigarh, India</div>
+                </div>
+                <ArrowRight className="size-4 ml-auto text-muted-foreground/30 group-hover:text-[#6EE7FF] transition-colors" />
               </a>
             </div>
           </div>
@@ -244,33 +264,10 @@ export function Contact() {
                   </div>
                 </div>
 
-                {/* Timeline */}
-                <div>
-                  <label className="block text-[14px] font-medium text-muted-foreground mb-3">
-                    Timeline
-                  </label>
-                  <div className="flex flex-wrap gap-2">
-                    {TIMELINES.map((tl) => (
-                      <button
-                        key={tl}
-                        type="button"
-                        onClick={() => setTimeline(tl)}
-                        className={`px-4 py-2 rounded-full text-[13px] font-medium border transition-colors ${
-                          timeline === tl
-                            ? "bg-[#8B7CFF]/15 text-[#8B7CFF] border-[#8B7CFF]/50"
-                            : "bg-black/20 border-white/5 text-muted-foreground hover:border-white/20 hover:text-foreground"
-                        }`}
-                      >
-                        {tl}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
                 {/* Budget */}
                 <div>
                   <label className="block text-[14px] font-medium text-muted-foreground mb-3">
-                    When do you need it?
+                    What's your budget?
                   </label>
                   <div className="flex flex-wrap gap-2">
                     {BUDGET_OPTIONS.map((b) => (
@@ -355,7 +352,6 @@ export function Contact() {
                     setSubmitted(false);
                     setBudget("");
                     setType(PROJECT_TYPES[0]);
-                    setTimeline(TIMELINES[2]);
                     setErrors({});
                     setTouched({});
                   }}
