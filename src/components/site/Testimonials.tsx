@@ -72,8 +72,8 @@ export function Testimonials() {
               transition={{ duration: 0.8, ease }}
               className="origin-left h-px w-16 bg-gradient-to-r from-[#6EE7FF] to-[#8B7CFF] mb-4"
             />
-            <p className="text-[10px] font-mono uppercase tracking-[0.22em] text-muted-foreground mb-2">
-              Trusted by founders
+            <p className="text-[14px] font-medium text-muted-foreground mb-2">
+              Client Feedback
             </p>
             <CinematicHeading
               tagline=""
@@ -142,7 +142,7 @@ export function Testimonials() {
                 initial={{ scale: 0.5, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ duration: 0.6, delay: 0.1, ease }}
-                className="font-display text-[96px] leading-none font-bold select-none"
+                className="text-[96px] leading-none font-bold select-none"
                 style={{
                   background: `linear-gradient(135deg, ${item.color}60 0%, ${item.color}18 100%)`,
                   WebkitBackgroundClip: "text",
@@ -172,7 +172,7 @@ export function Testimonials() {
               </div>
 
               {/* Quote */}
-              <blockquote className="max-w-4xl font-display text-balance text-2xl font-medium leading-snug tracking-tight md:text-[2.1rem] text-foreground/90">
+              <blockquote className="max-w-4xl text-balance text-2xl font-medium leading-snug tracking-tight md:text-[2.1rem] text-foreground/90">
                 {item.quote}
               </blockquote>
 
@@ -181,7 +181,7 @@ export function Testimonials() {
                 <div className="flex items-center gap-4">
                   {/* Avatar */}
                   <div
-                    className="size-12 rounded-full flex items-center justify-center font-display text-sm font-bold text-background flex-shrink-0"
+                    className="size-12 rounded-full flex items-center justify-center text-sm font-bold text-background flex-shrink-0"
                     style={{
                       background: `linear-gradient(135deg, ${item.color} 0%, #8B7CFF 100%)`,
                       boxShadow: `0 0 16px ${item.color}30`,
@@ -201,7 +201,7 @@ export function Testimonials() {
 
                 {/* Company text logo */}
                 <div
-                  className="font-display text-[13px] font-semibold tracking-[0.18em] uppercase"
+                  className="text-[14px] font-medium text-foreground/90"
                   style={{ color: `${item.color}70` }}
                 >
                   {item.company}

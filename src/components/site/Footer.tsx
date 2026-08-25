@@ -4,7 +4,7 @@ export function Footer() {
       <div className="container-px mx-auto max-w-6xl flex flex-col items-start justify-between gap-6 py-8 lg:py-12 md:flex-row md:items-center">
         <div className="flex items-center gap-2">
           <span className="inline-block size-1.5 rounded-full bg-foreground" />
-          <span className="font-display text-[14px] font-semibold tracking-tight">
+          <span className="text-[14px] font-semibold">
             ARPIT SHARMA
           </span>
         </div>
@@ -20,7 +20,7 @@ export function Footer() {
         <span>© 2024 Arpit Sharma. All rights reserved.</span>
         <a
           href="#contact"
-          className="font-mono uppercase tracking-wider hover:text-foreground transition-colors"
+          className="text-[13px] font-medium hover:text-foreground transition-colors"
         >
           Open to new projects →
         </a>

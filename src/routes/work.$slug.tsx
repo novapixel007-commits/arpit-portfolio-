@@ -94,7 +94,7 @@ function CaseStudy() {
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             className="mt-8"
           >
-            <span className="rounded-full border border-border bg-card px-3.5 py-1.5 text-[11px] text-[#6EE7FF] uppercase tracking-widest font-mono">
+            <span className="rounded-full border border-border bg-card px-3.5 py-1.5 text-[13px] font-medium text-[#6EE7FF]">
               {project.category}
             </span>
             <h1 className="mt-6 heading-display text-balance text-5xl md:text-7xl">
@@ -159,8 +159,8 @@ function CaseStudy() {
               className="grid grid-cols-1 gap-6 md:grid-cols-[1fr_2.2fr] md:gap-12"
             >
               <div>
-                <span className="font-mono text-[11px] text-[#8B7CFF] uppercase tracking-widest">[ 01 ]</span>
-                <h2 className="mt-2 font-display text-2xl font-medium tracking-tight">
+                <span className="text-[13px] font-medium text-[#8B7CFF]">[ 01 ]</span>
+                <h2 className="mt-2 text-2xl font-medium tracking-tight">
                   The Challenge
                 </h2>
               </div>
@@ -178,19 +178,19 @@ function CaseStudy() {
               className="grid grid-cols-1 gap-6 md:grid-cols-[1fr_2.2fr] md:gap-12"
             >
               <div>
-                <span className="font-mono text-[11px] text-[#8B7CFF] uppercase tracking-widest">[ 02 ]</span>
-                <h2 className="mt-2 font-display text-2xl font-medium tracking-tight">
+                <span className="text-[13px] font-medium text-[#8B7CFF]">[ 02 ]</span>
+                <h2 className="mt-2 text-2xl font-medium tracking-tight">
                   Creative Process
                 </h2>
               </div>
               <div className="space-y-6">
                 {project.process.map((p, idx) => (
                   <div key={idx} className="flex gap-4 items-start">
-                    <span className="font-mono text-[11.5px] text-[#6EE7FF] mt-0.5">
+                    <span className="text-[13px] font-medium text-[#6EE7FF] mt-0.5">
                       {String(idx + 1).padStart(2, "0")}.
                     </span>
                     <div>
-                      <h4 className="font-display text-[15px] font-semibold text-foreground">
+                      <h4 className="text-[15px] font-semibold text-foreground">
                         {p.step}
                       </h4>
                       <p className="mt-1 text-[14px] leading-relaxed text-muted-foreground">
@@ -211,8 +211,8 @@ function CaseStudy() {
               className="grid grid-cols-1 gap-6 md:grid-cols-[1fr_2.2fr] md:gap-12"
             >
               <div>
-                <span className="font-mono text-[11px] text-[#8B7CFF] uppercase tracking-widest">[ 03 ]</span>
-                <h2 className="mt-2 font-display text-2xl font-medium tracking-tight">
+                <span className="text-[13px] font-medium text-[#8B7CFF]">[ 03 ]</span>
+                <h2 className="mt-2 text-2xl font-medium tracking-tight">
                   The Result
                 </h2>
               </div>
@@ -229,7 +229,7 @@ function CaseStudy() {
 
           {/* Gallery Spread with Image Cursor Morph triggers */}
           <div className="mt-24">
-            <span className="block text-[10px] uppercase tracking-widest text-[#8B7CFF] font-mono mb-6 text-center">
+            <span className="block text-[13px] font-medium text-[#8B7CFF] mb-6 text-center">
               Detail Frames
             </span>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -259,7 +259,7 @@ function CaseStudy() {
               <div className="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
                 <div>
                   <span className="eyebrow text-[#8B7CFF]">Next Case Study</span>
-                  <h3 className="mt-3 font-display text-3xl md:text-5xl font-medium tracking-tight text-foreground transition-colors group-hover:text-[#6EE7FF]">
+                  <h3 className="mt-3 text-3xl md:text-5xl font-medium tracking-tight text-foreground transition-colors group-hover:text-[#6EE7FF]">
                     {nextProject.title}
                   </h3>
                   <p className="mt-3 text-[14px] text-muted-foreground max-w-md">
@@ -283,7 +283,7 @@ function CaseStudy() {
 function Meta({ k, v }: { k: string; v: string }) {
   return (
     <div>
-      <div className="text-[10px] font-mono uppercase tracking-widest text-[#8B7CFF]">
+      <div className="text-[13px] font-medium text-[#8B7CFF]">
         {k}
       </div>
       <div className="mt-2.5 text-[14px] font-semibold text-foreground">{v}</div>

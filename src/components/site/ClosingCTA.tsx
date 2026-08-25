@@ -16,7 +16,7 @@ export function ClosingCTA() {
             <div className="absolute -right-32 bottom-0 size-[420px] rounded-full bg-[radial-gradient(circle,oklch(0.85_0.04_60/0.25),transparent_60%)] blur-3xl" />
           </div>
 
-          <p className="relative text-[11px] uppercase tracking-[0.22em] text-primary-foreground/60">
+          <p className="relative text-[14px] font-medium text-primary-foreground/60">
             Now booking — Q3
           </p>
           <h2 className="relative mx-auto mt-6 max-w-4xl heading-display text-balance text-5xl font-medium md:text-7xl">

@@ -30,10 +30,10 @@ export function Process() {
 
         {/* Header */}
         <div className="mb-16 lg:mb-20">
-          <p className="font-mono text-[10px] lg:text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
+          <p className="text-[14px] font-medium text-muted-foreground">
             The Process
           </p>
-          <h2 className="mt-4 font-display text-[clamp(2rem,5vw,3.5rem)] font-bold leading-[0.94] tracking-tighter text-foreground">
+          <h2 className="mt-4 text-[clamp(2rem,5vw,3.5rem)] font-bold leading-[0.94] tracking-tight text-foreground">
             A calm, deliberate<br />
             way of working.
           </h2>
@@ -51,12 +51,12 @@ export function Process() {
               className="grid grid-cols-[3rem_1fr] lg:grid-cols-[6rem_1fr_2fr] items-start gap-6 lg:gap-12 py-8 lg:py-10"
             >
               {/* Number */}
-              <span className="font-mono text-[11px] text-muted-foreground/50 pt-1 lg:pt-2">
+              <span className="text-[13px] font-medium text-muted-foreground/50 pt-1 lg:pt-2">
                 {s.n}
               </span>
 
               {/* Title */}
-              <h3 className="font-display text-[1.5rem] lg:text-[2rem] font-bold tracking-tight text-foreground leading-none pt-0.5 lg:col-start-2">
+              <h3 className="text-[1.5rem] lg:text-[2rem] font-bold tracking-tight text-foreground leading-none pt-0.5 lg:col-start-2">
                 {s.title}
               </h3>
 

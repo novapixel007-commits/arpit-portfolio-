@@ -172,7 +172,7 @@ export function Navbar() {
           {/* Logo */}
           <Link to="/" style={{ display: "flex", alignItems: "center", gap: "8px", flexShrink: 0 }}>
             <span style={{ display: "inline-block", width: "6px", height: "6px", borderRadius: "50%", background: "#73E8FF" }} />
-            <span className="text-[12.5px] lg:text-[13.5px]" style={{ fontFamily: "var(--font-display)", fontWeight: 600, letterSpacing: "-0.02em", color: "var(--color-foreground)" }}>
+            <span className="text-[13px] lg:text-[14px] font-semibold text-foreground tracking-tight">
               arpit sharma
             </span>
           </Link>

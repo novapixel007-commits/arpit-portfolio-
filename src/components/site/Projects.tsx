@@ -150,17 +150,17 @@ const GalleryItem = memo(function GalleryItem({
 
       {/* Details below frame */}
       <div>
-        <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
+        <p className="text-[12px] font-medium text-muted-foreground">
           {project.category} · {meta.year} · {meta.duration}
         </p>
         <h3
-          className={`mt-1 font-display font-semibold tracking-tight text-foreground leading-tight ${
+          className={`mt-1 font-semibold tracking-tight text-foreground leading-tight ${
             isHorizontal ? "text-[1.15rem] lg:text-[1.3rem]" : "text-[1rem] lg:text-[1.1rem]"
           }`}
         >
           {project.title}
         </h3>
-        <p className="mt-0.5 font-mono text-[10px] text-muted-foreground/55 uppercase tracking-wider">
+        <p className="mt-1 text-[13px] font-medium text-muted-foreground/55">
           {meta.role}
         </p>
       </div>
@@ -315,17 +315,17 @@ export function Projects() {
       <div className="container-px mx-auto max-w-6xl mb-10 lg:mb-12">
         <div className="flex items-end justify-between gap-6 border-b border-border pb-6">
           <div>
-            <p className="font-mono text-[10px] lg:text-[11px] uppercase tracking-[0.2em] text-muted-foreground mb-3">
+            <p className="text-[14px] font-medium text-muted-foreground mb-3">
               Selected Work
             </p>
-            <h2 className="font-display text-[clamp(2rem,5vw,3.5rem)] font-bold leading-[0.94] tracking-tighter text-foreground">
+            <h2 className="text-[clamp(2rem,5vw,3.5rem)] font-bold leading-[0.94] tracking-tight text-foreground">
               Featured Projects
             </h2>
           </div>
 
           {/* Counter + nav */}
           <div className="flex items-center gap-3 flex-shrink-0 pb-1">
-            <span className="font-mono text-[11px] text-muted-foreground tabular-nums select-none">
+            <span className="text-[13px] font-medium text-muted-foreground tabular-nums select-none">
               {String(activeIndex + 1).padStart(2, "0")}{" "}
               <span className="text-muted-foreground/40">/</span>{" "}
               {String(PROJECTS.length).padStart(2, "0")}

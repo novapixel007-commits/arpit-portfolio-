@@ -117,10 +117,10 @@ export function Contact() {
           {/* ── LEFT: Contact Details ── */}
           <div className="space-y-12">
             <div>
-              <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-[#6EE7FF] mb-4">
-                direct channel
+              <p className="text-[14px] font-medium text-[#6EE7FF] mb-4">
+                Get in touch
               </p>
-              <h2 className="font-display text-[2rem] lg:text-[2.5rem] font-bold leading-tight tracking-tighter text-foreground">
+              <h2 className="text-[2rem] lg:text-[2.5rem] font-bold leading-tight text-foreground">
                 Let's discuss your project.
               </h2>
             </div>
@@ -171,7 +171,7 @@ export function Contact() {
                 {/* Name & Email */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label htmlFor="name" className="block font-mono text-[11px] uppercase tracking-wider text-muted-foreground mb-2">
+                    <label htmlFor="name" className="block text-[14px] font-medium text-muted-foreground mb-2">
                       Name *
                     </label>
                     <input
@@ -185,11 +185,11 @@ export function Contact() {
                       }`}
                     />
                     {touched.name && errors.name && (
-                      <p className="mt-1.5 text-[11px] font-mono text-red-400">{errors.name}</p>
+                      <p className="mt-1.5 text-[13px] text-red-400">{errors.name}</p>
                     )}
                   </div>
                   <div>
-                    <label htmlFor="email" className="block font-mono text-[11px] uppercase tracking-wider text-muted-foreground mb-2">
+                    <label htmlFor="email" className="block text-[14px] font-medium text-muted-foreground mb-2">
                       Email *
                     </label>
                     <input
@@ -203,14 +203,14 @@ export function Contact() {
                       }`}
                     />
                     {touched.email && errors.email && (
-                      <p className="mt-1.5 text-[11px] font-mono text-red-400">{errors.email}</p>
+                      <p className="mt-1.5 text-[13px] text-red-400">{errors.email}</p>
                     )}
                   </div>
                 </div>
 
                 {/* Company (Optional) */}
                 <div>
-                  <label htmlFor="company" className="block font-mono text-[11px] uppercase tracking-wider text-muted-foreground mb-2">
+                  <label htmlFor="company" className="block text-[14px] font-medium text-muted-foreground mb-2">
                     Company / Brand
                   </label>
                   <input
@@ -223,8 +223,8 @@ export function Contact() {
 
                 {/* Project Type */}
                 <div>
-                  <label className="block font-mono text-[11px] uppercase tracking-wider text-muted-foreground mb-3">
-                    Project Type
+                  <label className="block text-[14px] font-medium text-muted-foreground mb-3">
+                    Project type
                   </label>
                   <div className="flex flex-wrap gap-2">
                     {PROJECT_TYPES.map((t) => (
@@ -246,7 +246,7 @@ export function Contact() {
 
                 {/* Timeline */}
                 <div>
-                  <label className="block font-mono text-[11px] uppercase tracking-wider text-muted-foreground mb-3">
+                  <label className="block text-[14px] font-medium text-muted-foreground mb-3">
                     Timeline
                   </label>
                   <div className="flex flex-wrap gap-2">
@@ -269,8 +269,8 @@ export function Contact() {
 
                 {/* Budget */}
                 <div>
-                  <label className="block font-mono text-[11px] uppercase tracking-wider text-muted-foreground mb-3">
-                    Budget *
+                  <label className="block text-[14px] font-medium text-muted-foreground mb-3">
+                    When do you need it?
                   </label>
                   <div className="flex flex-wrap gap-2">
                     {BUDGET_OPTIONS.map((b) => (
@@ -292,14 +292,14 @@ export function Contact() {
                     ))}
                   </div>
                   {touched.budget && errors.budget && (
-                    <p className="mt-2 text-[11px] font-mono text-red-400">{errors.budget}</p>
+                    <p className="mt-2 text-[13px] text-red-400">{errors.budget}</p>
                   )}
                 </div>
 
                 {/* Message */}
                 <div>
-                  <label htmlFor="message" className="block font-mono text-[11px] uppercase tracking-wider text-muted-foreground mb-2">
-                    Project Description *
+                  <label htmlFor="message" className="block text-[14px] font-medium text-muted-foreground mb-2">
+                    Project details *
                   </label>
                   <textarea
                     id="message"
@@ -312,7 +312,7 @@ export function Contact() {
                     }`}
                   />
                   {touched.message && errors.message && (
-                    <p className="mt-1.5 text-[11px] font-mono text-red-400">{errors.message}</p>
+                    <p className="mt-1.5 text-[13px] text-red-400">{errors.message}</p>
                   )}
                 </div>
 
@@ -343,7 +343,7 @@ export function Contact() {
                 <div className="mx-auto size-12 rounded-full bg-[#6EE7FF]/10 flex items-center justify-center mb-6">
                   <Check className="size-6 text-[#6EE7FF]" />
                 </div>
-                <h3 className="font-display text-xl font-semibold text-foreground mb-2">
+                <h3 className="text-xl font-semibold text-foreground mb-2">
                   Inquiry sent successfully.
                 </h3>
                 <p className="text-muted-foreground text-[14px]">

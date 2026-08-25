@@ -81,8 +81,8 @@ export function Stats() {
           className="mb-10 flex items-center gap-3"
         >
           <div className="h-px flex-1 bg-gradient-to-r from-transparent via-border to-transparent" />
-          <span className="text-[10px] font-mono uppercase tracking-[0.22em] text-muted-foreground">
-            by the numbers
+          <span className="text-[14px] font-medium text-muted-foreground">
+            By the numbers
           </span>
           <div className="h-px flex-1 bg-gradient-to-l from-transparent via-border to-transparent" />
         </motion.div>
@@ -134,7 +134,7 @@ export function Stats() {
                 {/* Number */}
                 <div>
                   <div
-                    className="font-display text-[2.2rem] sm:text-[3.2rem] font-semibold leading-none tracking-tighter"
+                    className="text-[2.2rem] sm:text-[3.2rem] font-semibold leading-none tracking-tight"
                     style={{
                       background: `linear-gradient(135deg, #fff 30%, ${s.color} 100%)`,
                       WebkitBackgroundClip: "text",
@@ -169,7 +169,7 @@ export function Stats() {
         >
           <div className="flex items-center gap-4 mb-8">
             <div className="h-px flex-1 bg-gradient-to-r from-transparent via-border to-transparent" />
-            <p className="text-[10px] font-mono uppercase tracking-[0.22em] text-muted-foreground">
+            <p className="text-[14px] font-medium text-muted-foreground">
               Worked with
             </p>
             <div className="h-px flex-1 bg-gradient-to-l from-transparent via-border to-transparent" />
@@ -184,7 +184,7 @@ export function Stats() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: 0.35 + i * 0.06 }}
                 whileHover={{ opacity: 1 }}
-                className="font-display text-[13px] font-semibold tracking-[0.18em] text-foreground/35 uppercase hover:text-foreground/70 transition-colors duration-300 cursor-default"
+                className="text-[14px] font-medium text-foreground/40 hover:text-foreground/80 transition-colors duration-300 cursor-default"
               >
                 {brand}
               </motion.div>

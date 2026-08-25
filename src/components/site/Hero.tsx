@@ -52,14 +52,14 @@ export function Hero() {
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.1, ease }}
-          className="font-mono text-[10px] lg:text-[11px] uppercase tracking-[0.2em] text-muted-foreground"
+          className="text-[13px] font-medium text-muted-foreground"
         >
           Resolve Editor&nbsp;&amp;&nbsp;Motion Designer&nbsp;—&nbsp;Chandigarh, India
         </motion.p>
 
         {/* Headline */}
         <motion.div style={{ y: textY, opacity: textOpacity }} className="will-change-transform">
-          <h1 className="mt-5 lg:mt-7 font-display text-[clamp(2.6rem,8vw,6.5rem)] font-bold leading-[0.92] tracking-tighter text-foreground">
+          <h1 className="mt-5 lg:mt-7 text-[clamp(2.6rem,8vw,6.5rem)] font-bold leading-[0.92] tracking-tight text-foreground">
             <LineReveal delay={0.18}>Cinematic videos</LineReveal>
             <LineReveal delay={0.30}>that people</LineReveal>
             <LineReveal delay={0.42}>
@@ -143,7 +143,7 @@ export function Hero() {
                 </div>
                 {/* Label */}
                 <div className="absolute bottom-4 left-4 lg:bottom-6 lg:left-6">
-                  <span className="font-mono text-[9px] lg:text-[10px] uppercase tracking-[0.2em] text-white/50">
+                  <span className="text-[12px] font-medium text-white/60">
                     Cinematic Reel — 2024
                   </span>
                 </div>

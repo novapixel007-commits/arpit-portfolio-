@@ -37,7 +37,7 @@ export function About() {
                 About
               </h3>
               
-              <h2 className="font-display text-[2rem] lg:text-[2.75rem] font-bold leading-[1.1] text-foreground tracking-tight">
+              <h2 className="text-[2rem] lg:text-[2.75rem] font-bold leading-[1.1] text-foreground tracking-tight">
                 Hi, I'm Arpit.
               </h2>
             </div>
