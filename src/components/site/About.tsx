@@ -1,167 +1,73 @@
 import { motion } from "motion/react";
 import portrait from "@/assets/portrait.jpg.png";
 
-// ─── DATA ─────────────────────────────────────────────────────────────────────
-const TIMELINE = [
-  { year: "2024 — Now",  role: "Freelance Creative Editor",    company: "Founders, Creators & Studios" },
-  { year: "2023 — 2024", role: "Finishing & Color Specialist", company: "Obscura Motion Lab"            },
-  { year: "2022 — 2023", role: "Fusion Motion Compositor",     company: "Parallel Agencies"             },
-];
-
-const VALUES = [
-  { k: "Story First",  v: "If a frame doesn't serve the story, it doesn't belong in the timeline." },
-  { k: "Rhythm",       v: "Cuts timed precisely to breath shifts, vocal drops and organic visual weights." },
-  { k: "Color",        v: "Hand-rolled color matching, scene consistency, and realistic grain composite." },
-  { k: "Partnership",  v: "No account managers. Direct creative link from reference to final delivery." },
-];
-
-const SOFTWARE = ["DaVinci Resolve", "Fusion Studio", "Fairlight"];
-
-const ease = [0.16, 1, 0.3, 1] as const;
-
 // ─── ABOUT SECTION ────────────────────────────────────────────────────────────
 export function About() {
   return (
-    <section id="about" className="relative scroll-mt-24 mt-28 lg:mt-40">
+    <section id="about" className="relative scroll-mt-24 mt-24 lg:mt-32 pb-12 lg:pb-24">
       <div className="container-px mx-auto max-w-6xl">
-
-        {/* Eyebrow */}
-        <motion.p
-          initial={{ opacity: 0, y: 8 }}
+        
+        {/* Simple single entrance animation for the entire section */}
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7, ease }}
-          className="font-mono text-[10px] lg:text-[11px] uppercase tracking-[0.2em] text-muted-foreground"
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+          className="flex flex-col lg:flex-row gap-12 lg:gap-20 items-start"
         >
-          About
-        </motion.p>
-
-        {/* Single responsive grid — portrait left, content right */}
-        <div className="mt-10 lg:mt-14 grid grid-cols-1 lg:grid-cols-[5fr_7fr] gap-12 lg:gap-20 items-start">
-
-          {/* ── Left: Portrait ── */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-60px" }}
-            transition={{ duration: 1.0, ease }}
-            className="relative"
-          >
-            <div className="relative rounded-md overflow-hidden aspect-[3/4] w-full max-w-[400px] mx-auto lg:mx-0">
+          
+          {/* ── Left: Portrait (approx 40-45% on desktop) ── */}
+          <div className="w-full lg:w-[42%] shrink-0">
+            <div className="relative rounded-xl overflow-hidden w-full max-w-[500px] mx-auto lg:mx-0">
               <img
                 src={portrait}
-                alt="Arpit Sharma — Creative Video Editor"
-                className="absolute inset-0 w-full h-full object-cover object-top"
+                alt="Arpit Sharma"
+                className="w-full h-auto object-cover"
+                style={{ aspectRatio: "4/5" }}
                 loading="lazy"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
             </div>
-          </motion.div>
+          </div>
 
           {/* ── Right: Content ── */}
-          <div className="space-y-12 lg:space-y-14">
-
-            {/* Headline */}
-            <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.9, delay: 0.1, ease }}
-            >
-              <h2 className="font-display text-[clamp(1.8rem,4vw,3rem)] font-bold leading-[0.94] tracking-tighter text-foreground">
-                timing isn't just edits —{" "}
-                <span className="text-muted-foreground font-normal italic">
-                  timing is emotion.
-                </span>
+          <div className="w-full lg:w-[58%] pt-2 lg:pt-8 space-y-8">
+            
+            <div className="space-y-6">
+              <h3 className="text-base font-medium text-muted-foreground">
+                About
+              </h3>
+              
+              <h2 className="font-display text-[2rem] lg:text-[2.75rem] font-bold leading-[1.1] text-foreground tracking-tight">
+                Hi, I'm Arpit.
               </h2>
-              <div className="mt-6 space-y-4">
-                <p className="text-[14px] lg:text-[15px] leading-relaxed text-muted-foreground">
-                  Every great video starts with structure — not style. I build cinematic
-                  timelines combining color grading, audio finishing and motion design
-                  under a single DaVinci Resolve session.
-                </p>
-                <p className="text-[14px] lg:text-[15px] leading-relaxed text-muted-foreground">
-                  I partner with founders, creators and startups who want work that
-                  captures attention, builds authority and converts viewers into customers.
-                  Zero generic styling. Zero account managers.
-                </p>
-              </div>
-            </motion.div>
+            </div>
 
-            {/* Timeline */}
-            <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.9, delay: 0.15, ease }}
-            >
-              <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground mb-5">
-                Timeline
+            <div className="space-y-5">
+              <p className="text-[16px] lg:text-[17.5px] leading-[1.6] text-foreground/90">
+                I'm a video editor and motion designer focused on cinematic editing, motion graphics and visual storytelling.
               </p>
-              <div className="divide-y divide-border">
-                {TIMELINE.map((item, i) => (
-                  <div
-                    key={i}
-                    className="flex items-start justify-between gap-4 py-4"
-                  >
-                    <div>
-                      <p className="font-display text-[14px] lg:text-[15px] font-semibold text-foreground leading-tight">
-                        {item.role}
-                      </p>
-                      <p className="mt-1 font-mono text-[10px] text-muted-foreground uppercase tracking-wider">
-                        {item.year}
-                      </p>
-                    </div>
-                    <p className="text-[12px] lg:text-[13px] text-muted-foreground text-right max-w-[45%] leading-snug shrink-0">
-                      {item.company}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </motion.div>
+              
+              <p className="text-[16px] lg:text-[17.5px] leading-[1.6] text-foreground/90">
+                I work with founders, creators and brands to turn ideas into clear, engaging and visually strong videos.
+              </p>
+              
+              <p className="text-[16px] lg:text-[17.5px] leading-[1.6] text-foreground/90">
+                My approach is simple: understand the story, find the right rhythm, then make every frame earn its place.
+              </p>
+            </div>
 
-            {/* Editorial Values */}
-            <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.9, delay: 0.2, ease }}
-            >
-              <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground mb-5">
-                Editorial Values
+            <div className="pt-6 border-t border-border/40 space-y-4">
+              <p className="text-[14px] lg:text-[15px] text-muted-foreground">
+                2+ years creating and editing cinematic visual content.
               </p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-5">
-                {VALUES.map((val) => (
-                  <div key={val.k}>
-                    <p className="font-display text-[14px] font-semibold text-foreground">
-                      {val.k}
-                    </p>
-                    <p className="mt-1 text-[12px] lg:text-[13px] leading-relaxed text-muted-foreground">
-                      {val.v}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </motion.div>
-
-            {/* Software */}
-            <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.9, delay: 0.25, ease }}
-            >
-              <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground mb-3">
-                Tools
+              <p className="text-[14px] lg:text-[15px] text-muted-foreground">
+                DaVinci Resolve · Fusion · Fairlight · Adobe Premiere Pro
               </p>
-              <p className="text-[13px] lg:text-[14px] text-muted-foreground">
-                {SOFTWARE.join(" · ")}
-              </p>
-            </motion.div>
+            </div>
 
           </div>
-        </div>
-
+          
+        </motion.div>
       </div>
     </section>
   );
