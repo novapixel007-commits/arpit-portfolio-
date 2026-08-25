@@ -319,26 +319,6 @@ export function Contact() {
 
   return (
     <section id="contact" className="relative mt-12 py-8 lg:mt-24 lg:py-16 scroll-mt-24 overflow-hidden">
-      
-      {/* Subtle background light orb */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
-        <motion.div
-          animate={{
-            x: [-20, 20, -20],
-            y: [-10, 10, -10],
-          }}
-          transition={{
-            duration: 18,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[70%] h-[70%] rounded-full opacity-[0.02] pointer-events-none"
-          style={{
-            background: "radial-gradient(circle, #6EE7FF 0%, transparent 60%)",
-            filter: "blur(90px)",
-          }}
-        />
-      </div>
 
       <div className="container-px mx-auto max-w-7xl relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-start">

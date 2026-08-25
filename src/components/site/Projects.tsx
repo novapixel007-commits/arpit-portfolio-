@@ -1,21 +1,18 @@
-import { motion, useInView } from "motion/react";
-import { Play, ArrowUpRight } from "lucide-react";
-import { useState, useRef, useEffect, useCallback, memo } from "react";
+import { useRef, useState, useEffect, useCallback, memo } from "react";
+import { useInView } from "motion/react";
+import { ChevronLeft, ChevronRight, Play } from "lucide-react";
 import { PROJECTS, type Project } from "@/data/projects";
 
-// Extract YouTube ID safely
+// ─── HELPERS ──────────────────────────────────────────────────────────────────
+
 function getYouTubeId(url: string): string | null {
-  const match = url.match(
+  const m = url.match(
     /(?:youtube\.com\/(?:embed\/|watch\?v=|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/
   );
-  return match ? match[1] : null;
+  return m ? m[1] : null;
 }
 
-// Year, Duration, Role mapping for projects
-const PROJECT_METADATA: Record<
-  number,
-  { year: string; duration: string; role: string }
-> = {
+const META: Record<number, { year: string; duration: string; role: string }> = {
   7: { year: "2024", duration: "0:45", role: "Motion Designer" },
   2: { year: "2023", duration: "0:58", role: "Senior Editor" },
   3: { year: "2023", duration: "1:15", role: "Lead Editor" },
@@ -24,78 +21,99 @@ const PROJECT_METADATA: Record<
   1: { year: "2023", duration: "1:05", role: "Senior Editor" },
 };
 
-// ─── HERO PROJECT (HORIZONTAL CARD) ────────────────────────────────────────────
-const HeroProjectCard = memo(function HeroProjectCard({
+// ─── GALLERY ITEM ─────────────────────────────────────────────────────────────
+
+const GalleryItem = memo(function GalleryItem({
   project,
+  index,
   isPlaying,
+  isActive,
   onPlay,
-  onClosePlay,
+  onPause,
 }: {
   project: Project;
+  index: number;
   isPlaying: boolean;
+  isActive: boolean;
   onPlay: () => void;
-  onClosePlay: () => void;
+  onPause: () => void;
 }) {
-  const cardRef = useRef<HTMLDivElement>(null);
-  const isCardInView = useInView(cardRef, { once: false, margin: "-100px" });
+  const itemRef = useRef<HTMLDivElement>(null);
+  // Pause / unmount iframe when far out of view (1.5× viewport margin)
+  const isInView = useInView(itemRef, { margin: "150% 0px 150% 0px", once: false });
 
   const youtubeId = project.video ? getYouTubeId(project.video) : null;
   const isYouTube = Boolean(youtubeId);
-  const meta = PROJECT_METADATA[project.id] || { year: "2024", duration: "1:00", role: "Editor" };
+  const meta = META[project.id] ?? { year: "2024", duration: "1:00", role: "Editor" };
+  const thumb =
+    youtubeId
+      ? `https://img.youtube.com/vi/${youtubeId}/maxresdefault.jpg`
+      : project.thumbnail ?? project.image;
 
-  const thumbnailSrc = youtubeId
-    ? `https://img.youtube.com/vi/${youtubeId}/maxresdefault.jpg`
-    : project.thumbnail ?? project.image;
+  const isHorizontal = project.orientation === "horizontal";
 
-  // Auto-pause video when scrolled out of viewport
+  // Auto-pause when scrolled out of view
   useEffect(() => {
-    if (!isCardInView && isPlaying) {
-      onClosePlay();
-    }
-  }, [isCardInView, isPlaying, onClosePlay]);
+    if (!isInView && isPlaying) onPause();
+  }, [isInView, isPlaying, onPause]);
 
   return (
-    <motion.div
-      ref={cardRef}
-      initial={{ opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-80px" }}
-      transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-      className="w-full"
+    <div
+      ref={itemRef}
+      data-gallery-item
+      data-index={index}
+      className={`
+        flex-shrink-0 snap-start flex flex-col gap-4
+        transition-all duration-500 ease-out
+        ${isActive ? "opacity-100 scale-100" : "opacity-50 scale-[0.96]"}
+      `}
+      style={{
+        /* Horizontal: ~68vw capped at 900px; Vertical: ~32vw capped at 400px */
+        width: isHorizontal
+          ? "clamp(280px, 68vw, 900px)"
+          : "clamp(180px, 32vw, 400px)",
+      }}
     >
-      {/* Video frame */}
-      <div className="group relative rounded-md border border-border/50 overflow-hidden aspect-[16/9] w-full bg-black cursor-pointer transition-all duration-300 hover:border-border">
+      {/* Frame */}
+      <div
+        className={`
+          group relative rounded-md border border-border/50 overflow-hidden bg-black
+          cursor-pointer transition-border duration-300 hover:border-border w-full
+        `}
+        style={{ aspectRatio: isHorizontal ? "16 / 9" : "9 / 16" }}
+      >
         {/* Thumbnail */}
-        {(!isPlaying || !isYouTube) && thumbnailSrc && (
+        {(!isPlaying || !isYouTube) && thumb && (
           <img
-            src={thumbnailSrc}
+            src={thumb}
             alt={project.title}
             loading="lazy"
-            className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+            draggable={false}
+            className="absolute inset-0 w-full h-full object-cover select-none pointer-events-none transition-transform duration-500 group-hover:scale-[1.02]"
           />
         )}
 
         {/* HTML5 video */}
-        {isCardInView && !isYouTube && (
+        {isInView && !isYouTube && (
           <video
             src={project.video}
-            poster={thumbnailSrc}
+            poster={thumb}
             controls={isPlaying}
             loop
             playsInline
             muted
             autoPlay={isPlaying}
-            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-400 ${
+            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${
               isPlaying ? "opacity-100" : "opacity-0"
             }`}
           />
         )}
 
-        {/* YouTube iframe — only when visible and playing */}
-        {isCardInView && isYouTube && isPlaying && (
+        {/* YouTube iframe — only when in-view AND actively playing */}
+        {isInView && isYouTube && isPlaying && (
           <iframe
             src={`https://www.youtube.com/embed/${youtubeId}?autoplay=1&mute=0&playsinline=1&controls=1&modestbranding=1&rel=0&fs=1`}
-            className="absolute inset-0 w-full h-full pointer-events-auto z-40"
+            className="absolute inset-0 w-full h-full z-30 pointer-events-auto"
             allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
             allowFullScreen
             style={{ border: "none" }}
@@ -105,7 +123,7 @@ const HeroProjectCard = memo(function HeroProjectCard({
         )}
 
         {/* Bottom vignette */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none z-10" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none z-10" />
 
         {/* Play button */}
         {!isPlaying && (
@@ -114,234 +132,269 @@ const HeroProjectCard = memo(function HeroProjectCard({
             aria-label={`Play ${project.title}`}
             className="absolute inset-0 w-full h-full flex items-center justify-center z-20"
           >
-            <div className="flex items-center justify-center size-14 lg:size-16 rounded-full border border-white/25 bg-black/30 backdrop-blur-sm transition-all duration-300 group-hover:scale-110 group-hover:border-white/50">
-              <Play className="size-5 fill-white text-white translate-x-[2px]" />
+            <div
+              className={`
+                flex items-center justify-center rounded-full border border-white/25
+                bg-black/40 backdrop-blur-sm transition-all duration-300
+                group-hover:scale-110 group-hover:border-white/50
+                ${isHorizontal ? "size-14 lg:size-16" : "size-12"}
+              `}
+            >
+              <Play
+                className={`fill-white text-white translate-x-[1.5px] ${isHorizontal ? "size-5" : "size-4"}`}
+              />
             </div>
           </button>
         )}
       </div>
 
       {/* Details below frame */}
-      <div className="mt-5 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3">
-        <div>
-          <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
-            {project.category} · {meta.year} · {meta.duration}
-          </p>
-          <h3 className="mt-1.5 font-display font-bold text-[1.3rem] lg:text-[1.6rem] text-foreground leading-tight tracking-tight">
-            {project.title}
-          </h3>
-          <p className="mt-1 font-mono text-[11px] text-muted-foreground/60 uppercase tracking-wider">
-            {meta.role}
-          </p>
-        </div>
-        <a
-          href="#contact"
-          className="inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-wider text-muted-foreground hover:text-foreground transition-colors duration-200 shrink-0"
-        >
-          Enquire <ArrowUpRight className="size-3.5" />
-        </a>
-      </div>
-    </motion.div>
-  );
-});
-
-// ─── VERTICAL PROJECT (9:16) ───────────────────────────────────────────────────
-const VerticalProjectCard = memo(function VerticalProjectCard({
-  project,
-  isPlaying,
-  onPlay,
-  onClosePlay,
-}: {
-  project: Project;
-  isPlaying: boolean;
-  onPlay: () => void;
-  onClosePlay: () => void;
-}) {
-  const cardRef = useRef<HTMLDivElement>(null);
-  const isCardInView = useInView(cardRef, { once: false, margin: "-100px" });
-
-  const youtubeId = project.video ? getYouTubeId(project.video) : null;
-  const isYouTube = Boolean(youtubeId);
-  const meta = PROJECT_METADATA[project.id] || { year: "2024", duration: "1:00", role: "Editor" };
-
-  const thumbnailSrc = youtubeId
-    ? `https://img.youtube.com/vi/${youtubeId}/maxresdefault.jpg`
-    : project.thumbnail ?? project.image;
-
-  useEffect(() => {
-    if (!isCardInView && isPlaying) {
-      onClosePlay();
-    }
-  }, [isCardInView, isPlaying, onClosePlay]);
-
-  return (
-    <motion.div
-      ref={cardRef}
-      initial={{ opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-      className="w-full"
-    >
-      {/* Video frame */}
-      <div className="group relative rounded-md border border-border/50 overflow-hidden aspect-[9/16] w-full bg-black cursor-pointer transition-all duration-300 hover:border-border">
-        {/* Thumbnail */}
-        {(!isPlaying || !isYouTube) && thumbnailSrc && (
-          <img
-            src={thumbnailSrc}
-            alt={project.title}
-            loading="lazy"
-            className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
-          />
-        )}
-
-        {/* HTML5 video */}
-        {isCardInView && !isYouTube && (
-          <video
-            src={project.video}
-            poster={thumbnailSrc}
-            controls={isPlaying}
-            loop
-            playsInline
-            muted
-            autoPlay={isPlaying}
-            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-400 ${
-              isPlaying ? "opacity-100" : "opacity-0"
-            }`}
-          />
-        )}
-
-        {/* YouTube iframe */}
-        {isCardInView && isYouTube && isPlaying && (
-          <iframe
-            src={`https://www.youtube.com/embed/${youtubeId}?autoplay=1&mute=0&playsinline=1&controls=1&modestbranding=1&rel=0&fs=1`}
-            className="absolute inset-0 w-full h-full pointer-events-auto z-40"
-            allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
-            allowFullScreen
-            style={{ border: "none" }}
-            title={project.title}
-            loading="lazy"
-          />
-        )}
-
-        {/* Bottom gradient */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent pointer-events-none z-10" />
-
-        {/* Play button */}
-        {!isPlaying && (
-          <button
-            onClick={onPlay}
-            aria-label={`Play ${project.title}`}
-            className="absolute inset-0 w-full h-full flex items-center justify-center z-20"
-          >
-            <div className="flex items-center justify-center size-12 rounded-full border border-white/25 bg-black/30 backdrop-blur-sm transition-all duration-300 group-hover:scale-110 group-hover:border-white/50">
-              <Play className="size-4 fill-white text-white translate-x-[1px]" />
-            </div>
-          </button>
-        )}
-      </div>
-
-      {/* Details below frame */}
-      <div className="mt-4">
-        <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+      <div>
+        <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
           {project.category} · {meta.year} · {meta.duration}
         </p>
-        <h3 className="mt-1.5 font-display font-semibold text-[1.1rem] lg:text-[1.2rem] text-foreground leading-tight tracking-tight">
+        <h3
+          className={`mt-1 font-display font-semibold tracking-tight text-foreground leading-tight ${
+            isHorizontal ? "text-[1.15rem] lg:text-[1.3rem]" : "text-[1rem] lg:text-[1.1rem]"
+          }`}
+        >
           {project.title}
         </h3>
-        <p className="mt-0.5 font-mono text-[10px] text-muted-foreground/60 uppercase tracking-wider">
+        <p className="mt-0.5 font-mono text-[10px] text-muted-foreground/55 uppercase tracking-wider">
           {meta.role}
         </p>
       </div>
-    </motion.div>
+    </div>
   );
 });
 
-// ─── PROJECTS SECTION ─────────────────────────────────────────────────────────
+// ─── PROJECTS GALLERY SECTION ──────────────────────────────────────────────────
+
 export function Projects() {
+  const trackRef = useRef<HTMLDivElement>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
   const [playingId, setPlayingId] = useState<number | null>(null);
 
-  const handleClosePlay = useCallback((id: number) => {
-    setPlayingId((current) => (current === id ? null : current));
+  // ── IntersectionObserver: detect which item is most centred ────────────────
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track) return;
+
+    const items = Array.from(track.querySelectorAll<HTMLElement>("[data-gallery-item]"));
+    if (!items.length) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        // Pick the entry with the highest intersectionRatio
+        let best = entries[0];
+        for (const entry of entries) {
+          if (entry.intersectionRatio > (best?.intersectionRatio ?? 0)) best = entry;
+        }
+        if (best && best.isIntersecting) {
+          const idx = Number((best.target as HTMLElement).dataset.index);
+          if (!isNaN(idx)) setActiveIndex(idx);
+        }
+      },
+      {
+        root: track,
+        threshold: [0, 0.25, 0.5, 0.75, 1],
+        // Centre detection: only the middle 60% of the track width counts
+        rootMargin: "0px -20% 0px -20%",
+      }
+    );
+
+    items.forEach((item) => observer.observe(item));
+    return () => observer.disconnect();
   }, []);
 
-  const hero1 = PROJECTS[0];
-  const pair1_left = PROJECTS[1];
-  const pair1_right = PROJECTS[2];
-  const hero2 = PROJECTS[3];
-  const pair2_left = PROJECTS[4];
-  const pair2_right = PROJECTS[5];
+  // ── Pointer drag (desktop) ─────────────────────────────────────────────────
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track) return;
+
+    let startX = 0;
+    let startScrollLeft = 0;
+    let isDragging = false;
+    let hasMoved = false;
+
+    const onPointerDown = (e: PointerEvent) => {
+      if (e.pointerType === "touch") return; // let native touch handle touch
+      isDragging = true;
+      hasMoved = false;
+      startX = e.clientX;
+      startScrollLeft = track.scrollLeft;
+      track.setPointerCapture(e.pointerId);
+      track.style.cursor = "grabbing";
+      track.style.userSelect = "none";
+    };
+
+    const onPointerMove = (e: PointerEvent) => {
+      if (!isDragging) return;
+      const dx = e.clientX - startX;
+      if (Math.abs(dx) > 4) hasMoved = true;
+      track.scrollLeft = startScrollLeft - dx;
+    };
+
+    const onPointerUp = () => {
+      isDragging = false;
+      track.style.cursor = "";
+      track.style.userSelect = "";
+    };
+
+    // Prevent click-firing play when the user was dragging
+    const onClickCapture = (e: MouseEvent) => {
+      if (hasMoved) {
+        e.stopPropagation();
+        hasMoved = false;
+      }
+    };
+
+    track.addEventListener("pointerdown", onPointerDown);
+    track.addEventListener("pointermove", onPointerMove);
+    track.addEventListener("pointerup", onPointerUp);
+    track.addEventListener("pointercancel", onPointerUp);
+    track.addEventListener("click", onClickCapture, true);
+
+    return () => {
+      track.removeEventListener("pointerdown", onPointerDown);
+      track.removeEventListener("pointermove", onPointerMove);
+      track.removeEventListener("pointerup", onPointerUp);
+      track.removeEventListener("pointercancel", onPointerUp);
+      track.removeEventListener("click", onClickCapture, true);
+    };
+  }, []);
+
+  // ── Wheel → horizontal scroll (only while pointer is over track) ───────────
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track) return;
+
+    const onWheel = (e: WheelEvent) => {
+      // Only hijack predominantly-vertical wheel events over the track
+      if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) return; // already horizontal — let it pass
+      e.preventDefault();
+      track.scrollLeft += e.deltaY * 1.2;
+    };
+
+    track.addEventListener("wheel", onWheel, { passive: false });
+    return () => track.removeEventListener("wheel", onWheel);
+  }, []);
+
+  // ── Prev / Next ────────────────────────────────────────────────────────────
+  const goTo = useCallback((targetIndex: number) => {
+    const track = trackRef.current;
+    if (!track) return;
+    const items = Array.from(track.querySelectorAll<HTMLElement>("[data-gallery-item]"));
+    const target = items[targetIndex];
+    if (!target) return;
+
+    // Snap to item's offsetLeft, accounting for track padding
+    const trackPaddingLeft = parseInt(getComputedStyle(track).paddingLeft || "0", 10);
+    track.scrollTo({
+      left: target.offsetLeft - trackPaddingLeft,
+      behavior: "smooth",
+    });
+  }, []);
+
+  const prev = useCallback(() => {
+    goTo(Math.max(0, activeIndex - 1));
+  }, [activeIndex, goTo]);
+
+  const next = useCallback(() => {
+    goTo(Math.min(PROJECTS.length - 1, activeIndex + 1));
+  }, [activeIndex, goTo]);
+
+  const handlePause = useCallback((id: number) => {
+    setPlayingId((cur) => (cur === id ? null : cur));
+  }, []);
 
   return (
-    <section
-      id="work"
-      className="relative mt-20 lg:mt-28 scroll-mt-24"
-    >
-      <div className="container-px mx-auto max-w-6xl">
+    <section id="work" className="relative mt-20 lg:mt-28 scroll-mt-24">
 
-        {/* Section Header */}
-        <div className="mb-12 lg:mb-16 border-b border-border pb-6">
-          <p className="font-mono text-[10px] lg:text-[11px] uppercase tracking-[0.2em] text-muted-foreground mb-3">
-            Selected Work
-          </p>
-          <h2 className="font-display text-[clamp(2rem,5vw,3.5rem)] font-bold leading-[0.94] tracking-tighter text-foreground">
-            Featured Projects
-          </h2>
-        </div>
-
-        {/* Projects layout */}
-        <div className="flex flex-col gap-16 lg:gap-20">
-
-          {/* Row 1: Hero (16:9) */}
-          <HeroProjectCard
-            project={hero1}
-            isPlaying={playingId === hero1.id}
-            onPlay={() => setPlayingId(hero1.id)}
-            onClosePlay={() => handleClosePlay(hero1.id)}
-          />
-
-          {/* Row 2: Pair (9:16) */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 lg:gap-10">
-            <VerticalProjectCard
-              project={pair1_left}
-              isPlaying={playingId === pair1_left.id}
-              onPlay={() => setPlayingId(pair1_left.id)}
-              onClosePlay={() => handleClosePlay(pair1_left.id)}
-            />
-            <VerticalProjectCard
-              project={pair1_right}
-              isPlaying={playingId === pair1_right.id}
-              onPlay={() => setPlayingId(pair1_right.id)}
-              onClosePlay={() => handleClosePlay(pair1_right.id)}
-            />
+      {/* ── Header row ── */}
+      <div className="container-px mx-auto max-w-6xl mb-10 lg:mb-12">
+        <div className="flex items-end justify-between gap-6 border-b border-border pb-6">
+          <div>
+            <p className="font-mono text-[10px] lg:text-[11px] uppercase tracking-[0.2em] text-muted-foreground mb-3">
+              Selected Work
+            </p>
+            <h2 className="font-display text-[clamp(2rem,5vw,3.5rem)] font-bold leading-[0.94] tracking-tighter text-foreground">
+              Featured Projects
+            </h2>
           </div>
 
-          {/* Row 3: Hero (16:9) */}
-          <HeroProjectCard
-            project={hero2}
-            isPlaying={playingId === hero2.id}
-            onPlay={() => setPlayingId(hero2.id)}
-            onClosePlay={() => handleClosePlay(hero2.id)}
-          />
+          {/* Counter + nav */}
+          <div className="flex items-center gap-3 flex-shrink-0 pb-1">
+            <span className="font-mono text-[11px] text-muted-foreground tabular-nums select-none">
+              {String(activeIndex + 1).padStart(2, "0")}{" "}
+              <span className="text-muted-foreground/40">/</span>{" "}
+              {String(PROJECTS.length).padStart(2, "0")}
+            </span>
 
-          {/* Row 4: Pair (9:16) */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 lg:gap-10">
-            <VerticalProjectCard
-              project={pair2_left}
-              isPlaying={playingId === pair2_left.id}
-              onPlay={() => setPlayingId(pair2_left.id)}
-              onClosePlay={() => handleClosePlay(pair2_left.id)}
-            />
-            <VerticalProjectCard
-              project={pair2_right}
-              isPlaying={playingId === pair2_right.id}
-              onPlay={() => setPlayingId(pair2_right.id)}
-              onClosePlay={() => handleClosePlay(pair2_right.id)}
-            />
+            <button
+              onClick={prev}
+              disabled={activeIndex === 0}
+              aria-label="Previous project"
+              className="size-8 flex items-center justify-center rounded-full border border-border text-muted-foreground
+                hover:border-foreground/30 hover:text-foreground transition-all duration-200
+                disabled:opacity-25 disabled:cursor-not-allowed"
+            >
+              <ChevronLeft className="size-3.5" strokeWidth={2} />
+            </button>
+
+            <button
+              onClick={next}
+              disabled={activeIndex === PROJECTS.length - 1}
+              aria-label="Next project"
+              className="size-8 flex items-center justify-center rounded-full border border-border text-muted-foreground
+                hover:border-foreground/30 hover:text-foreground transition-all duration-200
+                disabled:opacity-25 disabled:cursor-not-allowed"
+            >
+              <ChevronRight className="size-3.5" strokeWidth={2} />
+            </button>
           </div>
-
         </div>
       </div>
+
+      {/* ── Scroll track ── */}
+      {/*
+        overflow-x: scroll + scroll-snap-type x proximity
+        touch-action: pan-x  ← allows horizontal swipe without fighting vertical page scroll
+        padding-inline: peek gap at edges so next item is visible
+        No scrollbar on any browser via css classes below
+      */}
+      <div
+        ref={trackRef}
+        className="
+          flex gap-5 lg:gap-7
+          overflow-x-scroll overflow-y-hidden
+          scroll-snap-type-x-proximity
+          touch-action-pan-x
+          [scrollbar-width:none] [&::-webkit-scrollbar]:hidden
+          items-end
+          pb-2
+        "
+        style={{
+          scrollSnapType: "x proximity",
+          touchAction: "pan-x",
+          paddingLeft: "clamp(1rem, 4vw, 4rem)",
+          paddingRight: "clamp(1rem, 4vw, 4rem)",
+          cursor: "grab",
+        }}
+      >
+        {PROJECTS.map((project, i) => (
+          <GalleryItem
+            key={project.id}
+            project={project}
+            index={i}
+            isPlaying={playingId === project.id}
+            isActive={activeIndex === i}
+            onPlay={() => setPlayingId(project.id)}
+            onPause={() => handlePause(project.id)}
+          />
+        ))}
+      </div>
+
     </section>
   );
 }

@@ -15,7 +15,6 @@ import { CustomCursor } from "@/components/site/CustomCursor";
 import { GlobalBackground } from "@/components/site/GlobalBackground";
 import { Navbar } from "@/components/site/Navbar";
 import { Toaster } from "@/components/ui/sonner";
-import Lenis from "lenis";
 
 function NotFoundComponent() {
   return (
@@ -155,30 +154,6 @@ function RootShell({ children }: { children: ReactNode }) {
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
 
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-
-    const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      smoothWheel: true,
-      wheelMultiplier: 1.0,
-      touchMultiplier: 1.5,
-    });
-
-    let rafId: number;
-    const raf = (time: number) => {
-      lenis.raf(time);
-      rafId = requestAnimationFrame(raf);
-    };
-
-    rafId = requestAnimationFrame(raf);
-
-    return () => {
-      cancelAnimationFrame(rafId);
-      lenis.destroy();
-    };
-  }, []);
 
   return (
     <QueryClientProvider client={queryClient}>

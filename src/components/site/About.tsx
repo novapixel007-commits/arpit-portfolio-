@@ -55,14 +55,6 @@ export function About() {
                 loading="lazy"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
-              {/* Availability badge */}
-              <div className="absolute bottom-4 left-4 flex items-center gap-2">
-                <span className="relative flex h-1.5 w-1.5">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
-                  <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-green-400" />
-                </span>
-                <span className="font-mono text-[9px] uppercase tracking-wider text-white/70">Available for projects</span>
-              </div>
             </div>
           </motion.div>
 
