@@ -11,7 +11,6 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
-import { CustomCursor } from "@/components/site/CustomCursor";
 import { GlobalBackground } from "@/components/site/GlobalBackground";
 import { Navbar } from "@/components/site/Navbar";
 import { Toaster } from "@/components/ui/sonner";
@@ -129,12 +128,6 @@ function RootShell({ children }: { children: ReactNode }) {
                   document.documentElement.classList.remove('light');
                   localStorage.setItem('theme', 'dark');
 
-                  // Prevent flashes of the cinematic intro screen on repeat visits
-                  if (localStorage.getItem('portfolio_intro_seen') === 'true') {
-                    var style = document.createElement('style');
-                    style.innerHTML = '#ssr-overlay { display: none !important; }';
-                    document.head.appendChild(style);
-                  }
                 } catch (e) {
                   document.documentElement.classList.add('dark');
                 }
@@ -159,7 +152,6 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <GlobalBackground />
       <Navbar />
-      <CustomCursor />
       <Outlet />
       <Toaster position="bottom-right" richColors />
     </QueryClientProvider>

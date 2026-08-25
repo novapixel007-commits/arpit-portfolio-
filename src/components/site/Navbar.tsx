@@ -54,14 +54,7 @@ export function Navbar() {
 
   useMotionValueEvent(scrollY, "change", () => {});
 
-  // On repeat visits: reveal navbar immediately (no intro sequence)
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const seen = localStorage.getItem("portfolio_intro_seen") === "true";
-    if (seen && headerRef.current) {
-      headerRef.current.style.opacity = "1";
-    }
-  }, []);
+
 
   // ── Active section tracker ──
   useEffect(() => {
@@ -107,8 +100,7 @@ export function Navbar() {
         flexDirection: "column",
         alignItems: "center",
         pointerEvents: "none",
-        // Start hidden — GSAP reveals on first visit, useEffect reveals on repeat
-        opacity: 0,
+        opacity: 1,
       }}
     >
       {/* ── Floating Glass Pill ── */}

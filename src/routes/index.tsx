@@ -3,8 +3,6 @@ import React, { Suspense, lazy } from "react";
 
 import { Hero } from "@/components/site/Hero";
 import { ScrollProgress } from "@/components/site/ScrollProgress";
-import { IntroLoader } from "@/components/site/IntroLoader";
-import { useRef, useState, useEffect } from "react";
 
 // Lazy load below-the-fold sections for optimized initial bundle loading
 const Projects = lazy(() => import("@/components/site/Projects").then(m => ({ default: m.Projects })));
@@ -36,29 +34,9 @@ export const Route = createFileRoute("/")(({
 }));
 
 function Index() {
-  const [introActive, setIntroActive] = useState(true);
-  const [showSsrOverlay, setShowSsrOverlay] = useState(true);
-  const pageRef = useRef<HTMLDivElement | null>(null);
-
-  // Failsafe: Force reveal website after 2.8s maximum to guarantee it never gets stuck blank
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIntroActive(false);
-      setShowSsrOverlay(false);
-    }, 2800);
-    return () => clearTimeout(timer);
-  }, []);
-
   return (
     <div className="relative min-h-screen overflow-x-hidden">
-      {/* SSR black overlay to prevent hydration flashes on first-visit */}
-      {showSsrOverlay && <div className="fixed inset-0 bg-[#0A0A0B] z-[9999]" id="ssr-overlay" />}
-
-      {/* Homepage Content wrapper revealed by clip-path mask */}
-      <div
-        ref={pageRef}
-        className={introActive ? "noise relative size-full opacity-0" : "noise relative size-full"}
-      >
+      <div className="noise relative size-full">
         <ScrollProgress />
         <main>
           <Hero />
@@ -73,16 +51,6 @@ function Index() {
           <Footer />
         </Suspense>
       </div>
-
-      {introActive && (
-        <IntroLoader
-          pageRef={pageRef}
-          onComplete={() => {
-            setIntroActive(false);
-            setShowSsrOverlay(false);
-          }}
-        />
-      )}
     </div>
   );
 }
