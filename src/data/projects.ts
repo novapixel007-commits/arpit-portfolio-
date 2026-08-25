@@ -28,27 +28,28 @@ export interface Project {
 export const PROJECTS: Project[] = [
   // ── Position 1 · Hero horizontal ──────────────────────────────────────────
   {
-    id: 7,
-    slug: "cinematic-motion-system",
-    title: "Cinematic Motion System",
+    id: 4,
+    slug: "motion-graphics-launch",
+    title: "Motion Graphic",
     category: "Motion Graphics",
     orientation: "horizontal",
-    featured: true,
     description:
-      "A cinematic motion graphics sequence crafted with clean animation, dynamic transitions, modern typography, and precise visual rhythm. Designed to create a premium, high-end viewing experience.",
-    software: ["DaVinci Resolve", "Fusion"],
-    tools: ["DaVinci Resolve", "Fusion", "Motion Graphics", "Animation", "Typography", "Cinematic"],
-    video: "https://www.youtube.com/watch?v=4fFSQCw_SOA",
-    image: "https://img.youtube.com/vi/4fFSQCw_SOA/maxresdefault.jpg",
-    thumbnail: "https://img.youtube.com/vi/4fFSQCw_SOA/maxresdefault.jpg",
-    role: "Motion Designer",
+      "A high-impact motion graphics sequence built with clean animation, dynamic transitions, and precise visual rhythm.",
+    software: ["DaVinci Resolve", "Fusion", "Animation"],
+    tools: ["DaVinci Resolve", "Fusion", "Animation"],
+    video: "https://youtu.be/5RDF3y9pO5A?si=O94_t5XTYFTgozRH",
+    image: "https://img.youtube.com/vi/5RDF3y9pO5A/maxresdefault.jpg",
+    thumbnail: "https://img.youtube.com/vi/5RDF3y9pO5A/maxresdefault.jpg",
+    role: "Fusion Compositor",
     challenge:
-      "A cinematic motion graphics sequence crafted with clean animation, dynamic transitions, modern typography, and precise visual rhythm. Designed to create a premium, high-end viewing experience.",
+      "A startup wanted to announce their brand refresh with an animation that felt like physical paper layering on digital screens. The motion curves had to feel heavy and tactile, not robotic.",
     process: [
-      { step: "Design", detail: "Modern typography and layout." },
+      { step: "Tactile References", detail: "Studied macro video references of real paper sheets folding and layering under light." },
+      { step: "Bezier Curve Tuning", detail: "Spent hours refining ease-in and ease-out curves inside Fusion Spline Editor for maximum weight." },
+      { step: "Depth Defocus Pass", detail: "Applied dynamic focal lens blurs to mimic professional camera lenses focusing on detail slides." },
     ],
-    result: "A premium, high-end viewing experience.",
-    gallery: ["https://img.youtube.com/vi/4fFSQCw_SOA/maxresdefault.jpg", p1, p2],
+    result: "Shared by Framer Design as a showcase launch animation, leading to 12 inbound inquiries for high-end product campaigns.",
+    gallery: ["https://img.youtube.com/vi/5RDF3y9pO5A/maxresdefault.jpg", p2, p4],
   },
 
   // ── Position 2 · Vertical ─────────────────────────────────────────────────
@@ -105,28 +106,27 @@ export const PROJECTS: Project[] = [
 
   // ── Position 4 · Horizontal ───────────────────────────────────────────────
   {
-    id: 4,
-    slug: "motion-graphics-launch",
-    title: "Motion Graphic",
+    id: 7,
+    slug: "cinematic-motion-system",
+    title: "Cinematic Motion System",
     category: "Motion Graphics",
     orientation: "horizontal",
+    featured: true,
     description:
-      "A high-impact motion graphics sequence built with clean animation, dynamic transitions, and precise visual rhythm.",
-    software: ["DaVinci Resolve", "Fusion", "Animation"],
-    tools: ["DaVinci Resolve", "Fusion", "Animation"],
-    video: "https://youtu.be/5RDF3y9pO5A?si=O94_t5XTYFTgozRH",
-    image: "https://img.youtube.com/vi/5RDF3y9pO5A/maxresdefault.jpg",
-    thumbnail: "https://img.youtube.com/vi/5RDF3y9pO5A/maxresdefault.jpg",
-    role: "Fusion Compositor",
+      "A cinematic motion graphics sequence crafted with clean animation, dynamic transitions, modern typography, and precise visual rhythm. Designed to create a premium, high-end viewing experience.",
+    software: ["DaVinci Resolve", "Fusion"],
+    tools: ["DaVinci Resolve", "Fusion", "Motion Graphics", "Animation", "Typography", "Cinematic"],
+    video: "https://www.youtube.com/watch?v=4fFSQCw_SOA",
+    image: "https://img.youtube.com/vi/4fFSQCw_SOA/maxresdefault.jpg",
+    thumbnail: "https://img.youtube.com/vi/4fFSQCw_SOA/maxresdefault.jpg",
+    role: "Motion Designer",
     challenge:
-      "A startup wanted to announce their brand refresh with an animation that felt like physical paper layering on digital screens. The motion curves had to feel heavy and tactile, not robotic.",
+      "A cinematic motion graphics sequence crafted with clean animation, dynamic transitions, modern typography, and precise visual rhythm. Designed to create a premium, high-end viewing experience.",
     process: [
-      { step: "Tactile References", detail: "Studied macro video references of real paper sheets folding and layering under light." },
-      { step: "Bezier Curve Tuning", detail: "Spent hours refining ease-in and ease-out curves inside Fusion Spline Editor for maximum weight." },
-      { step: "Depth Defocus Pass", detail: "Applied dynamic focal lens blurs to mimic professional camera lenses focusing on detail slides." },
+      { step: "Design", detail: "Modern typography and layout." },
     ],
-    result: "Shared by Framer Design as a showcase launch animation, leading to 12 inbound inquiries for high-end product campaigns.",
-    gallery: ["https://img.youtube.com/vi/5RDF3y9pO5A/maxresdefault.jpg", p2, p4],
+    result: "A premium, high-end viewing experience.",
+    gallery: ["https://img.youtube.com/vi/4fFSQCw_SOA/maxresdefault.jpg", p1, p2],
   },
 
   // ── Position 5 · Vertical ─────────────────────────────────────────────────
